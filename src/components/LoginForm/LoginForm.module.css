@@ -1,0 +1,8 @@
+.loginForm {
+    position: relative;
+    top: 200px;
+    width: 300px;
+
+    display: flex;
+    flex-direction: column;
+}
