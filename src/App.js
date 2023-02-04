@@ -1,8 +1,8 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 
+import { RequireAuth } from "./hoc";
 import { MainLayout } from "./layouts";
-import { LoginPage } from "./pages";
-import { PaidPage } from "./pages/PaidPage/PaidPage";
+import { LoginPage, NotFoundPage, PaidPage } from "./pages";
 
 
 function App() {
@@ -11,8 +11,13 @@ function App() {
           <Route path={'/'} element={<MainLayout/>}>
               <Route index element={<Navigate to={'/login'}/>}/>
               <Route path={'/login'} element={<LoginPage/>}/>
-              <Route path={'/paid'} element={<PaidPage/>}/>
+              <Route path={'/paid'} element={
+                  <RequireAuth>
+                      <PaidPage/>
+                  </RequireAuth>
+              }/>
           </Route>
+          <Route path={'*'} element={<NotFoundPage/>}/>
       </Routes>
     );
 }

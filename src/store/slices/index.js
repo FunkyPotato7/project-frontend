@@ -1,1 +1,1 @@
-export * from './paid.slice'
+export * from './paid.slice';

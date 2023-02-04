@@ -1,0 +1,11 @@
+.comments {
+    width: 50%;
+    height: 100px;
+
+    margin-right: 100px;
+    border: 3px #1976d2 solid;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

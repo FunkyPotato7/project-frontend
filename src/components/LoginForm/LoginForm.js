@@ -4,15 +4,16 @@ import { useNavigate } from "react-router-dom";
 import { Button, TextField } from "@mui/material";
 
 import { authService } from "../../services";
-import css from './LoginForm.module.css'
+import css from './LoginForm.module.css';
 
 const LoginForm = () => {
 
     const { handleSubmit, register } = useForm();
     const navigate = useNavigate();
 
-    let [emailError, setEmailError] = useState(null);
-    let [passwordError, setPasswordError] = useState(null);
+    const [emailError, setEmailError] = useState(null);
+    const [passwordError, setPasswordError] = useState(null);
+    // const [commonError, setCommonError] = useState(null);
 
     const submit = async (user) => {
         try {
@@ -22,8 +23,9 @@ const LoginForm = () => {
             setEmailError(null);
             setPasswordError(null);
 
-            navigate('/paid');
+            navigate('/paid?page=1');
         } catch (e) {
+            // console.log(e.message);
             if (e.response.data.slice(1,6) === 'email') {
                 setEmailError(e.response.data);
             }
@@ -37,6 +39,10 @@ const LoginForm = () => {
                 setPasswordError(e.response.data)
                 setEmailError(null)
             }
+
+            // if (e.message === 'Network Error') {
+            //     setCommonError(e.message)
+            // }
         }
 
     };
@@ -45,7 +51,7 @@ const LoginForm = () => {
         <div className={css.loginForm}>
             <h2>Login</h2>
             <TextField
-                id="outlined-basic"
+                id="email"
                 label="Email"
                 variant="outlined"
                 type="email"
@@ -56,7 +62,7 @@ const LoginForm = () => {
                 {...register('email')}
             />
             <TextField
-                id="outlined-basic"
+                id="password"
                 label="Password"
                 variant="outlined"
                 type="password"
@@ -67,7 +73,7 @@ const LoginForm = () => {
             />
             <Button variant='contained' onClick={handleSubmit(submit)} >Login</Button>
         </div>
-    )
+    );
 };
 
 export {

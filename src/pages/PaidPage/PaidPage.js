@@ -1,13 +1,12 @@
-import { Header, Paid, Footer } from "../../components";
-import './PaidPage.css';
-
+import css from './PaidPage.module.css'
+import { Header, Footer, PaidTable } from "../../components";
 
 const PaidPage = () => {
 
     return(
-        <div className="paid-page">
+        <div className={css.paidPage}>
             <Header/>
-            <Paid/>
+            <PaidTable/>
             <Footer/>
         </div>
     )

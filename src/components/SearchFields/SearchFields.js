@@ -1,22 +1,13 @@
 import { useSearchParams } from "react-router-dom";
 import { FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 
-import css from "./SearchFields.module.css"
+import css from "./SearchFields.module.css";
 
 
 const SearchFields = () => {
     const [ query, setQuery ] = useSearchParams();
 
-        // let someValue; //maybe fix, date input, maybe sorting from query, you committed new changes on your back side
-        //
-        // const queryChanger = () => {
-        //     query.forEach((value, key) => {
-        //         console.log(`Value: ${value}, Key: ${key}`)
-        //         someValue = {...someValue, [key]: value}
-        //     });
-        // }
-        //
-        // queryChanger()
+    //phone input, tfoot err, id`s, clear code, comment window
 
     const handleChange = (e) => {
 
@@ -26,29 +17,28 @@ const SearchFields = () => {
             query.delete(e.target.name);
         }
 
-        setQuery(prev => query);
+        setQuery(query);
 
-    }
+    };
 
 
     return(
         <div className={css.fields}>
-            <form>
-                <TextField name="name" label="Name" variant="standard" sx={{width: 120}} onChange={handleChange}/>
-                <TextField name="surname"  label="Surname" variant="standard" sx={{width: 150}} onChange={handleChange}/>
-                <TextField name="age" label="Age" variant="standard" sx={{width: 100}} onChange={handleChange}/>
-                <TextField name="email"  label="Email" variant="standard" sx={{width: 230}} onChange={handleChange}/>
-                <TextField name="phone" label="Phone" variant="standard" sx={{width: 180}} onChange={handleChange}/>
-            </form>
-            <FormControl variant="standard" sx={{width: 100}}>
-                <InputLabel id="simple-select-course" sx={{fontSize: 12}}>Course</InputLabel>
+            <TextField name="name" label="Name" variant="standard" value={ query.get('name') ? query.get('name') : '' } sx={{width: 120}} onChange={handleChange}/>
+            <TextField name="surname" label="Surname" variant="standard" value={ query.get('surname') ? query.get('surname') : '' } sx={{width: 150}} onChange={handleChange}/>
+            <TextField name="age" label="Age" variant="standard" value={ query.get('age') ? query.get('age') : '' } sx={{width: 80}} onChange={handleChange}/>
+            <TextField name="email"  label="Email" type="email" value={ query.get('email') ? query.get('email') : '' } variant="standard" sx={{width: 210}} onChange={handleChange}/>
+            <TextField name="phone" label="Phone" type="tel" variant="standard" value={ query.get('phone') ? query.get('phone') : '' } sx={{width: 160}} onChange={handleChange}/>
+            <FormControl variant="standard" sx={{width: 120}}>
+                <InputLabel id="simple-select-course">Course</InputLabel>
                 <Select
                     name='course'
                     defaultValue=''
                     onChange={handleChange}
+                    value={ query.get('course') ? query.get('course') : '' }
                 >
                     <MenuItem value={''}> </MenuItem>
-                    <MenuItem value={'FE'}>FE</MenuItem>
+                    <MenuItem value={'FE'} >FE</MenuItem>
                     <MenuItem value={'FS'}>FS</MenuItem>
                     <MenuItem value={'JCX'}>JCX</MenuItem>
                     <MenuItem value={'JSCX'}>JSCX</MenuItem>
@@ -56,24 +46,26 @@ const SearchFields = () => {
                     <MenuItem value={'QACX'}>QACX</MenuItem>
                 </Select>
             </FormControl>
-            <FormControl variant="standard" sx={{width: 120}}>
-                <InputLabel id="simple-select-course_format" sx={{fontSize: 12}}>Course_format</InputLabel>
+            <FormControl variant="standard" sx={{width: 180}}>
+                <InputLabel id="simple-select-course_format">Course Format</InputLabel>
                 <Select
                     name='course_format'
                     defaultValue=''
                     onChange={handleChange}
+                    value={ query.get('course_format') ? query.get('course_format') : '' }
                 >
                     <MenuItem value=''> </MenuItem>
                     <MenuItem value={'online'}>online</MenuItem>
                     <MenuItem value={'static'}>static</MenuItem>
                 </Select>
             </FormControl>
-            <FormControl variant="standard" sx={{width: 120}}>
-                <InputLabel id="simple-select-course_format" sx={{fontSize: 12}}>Course_type</InputLabel>
+            <FormControl variant="standard" sx={{width: 180}}>
+                <InputLabel id="simple-select-course_format">Course Type</InputLabel>
                 <Select
                     name='course_type'
                     defaultValue=''
                     onChange={handleChange}
+                    value={ query.get('course_type') ? query.get('course_type') : '' }
                 >
                     <MenuItem value=''> </MenuItem>
                     <MenuItem value={'incubator'}>incubator</MenuItem>
@@ -84,11 +76,12 @@ const SearchFields = () => {
                 </Select>
             </FormControl>
             <FormControl variant="standard" sx={{width: 120}}>
-                <InputLabel id="simple-select-course_format" sx={{fontSize: 12}}>Status</InputLabel>
+                <InputLabel id="simple-select-course_format">Status</InputLabel>
                 <Select
                     name='status'
                     defaultValue=''
                     onChange={handleChange}
+                    value={ query.get('status') ? query.get('status') : '' }
                 >
                     <MenuItem value=''> </MenuItem>
                     <MenuItem value={'Соласен'}>Соласен</MenuItem>
@@ -99,20 +92,30 @@ const SearchFields = () => {
                 </Select>
             </FormControl>
             <FormControl variant="standard" sx={{width: 120}}>
-                <InputLabel id="simple-select-course_format" sx={{fontSize: 12}}>Group</InputLabel>
+                <InputLabel id="simple-select-course_format">Group</InputLabel>
                 <Select
                     name='group'
                     defaultValue=''
                     onChange={handleChange}
+                    value={ query.get('group') ? query.get('group') : '' }
                 >
                     <MenuItem value=''> </MenuItem>
                     <MenuItem value={'qwerty'}>qwerty</MenuItem>
                     <MenuItem value={'вреорео'}>вреорео</MenuItem>
                 </Select>
             </FormControl>
-            <TextField name="created_at" type="date" label="Created at"  variant="standard" sx={{width: 180}}/>
+            <TextField
+                name="created_at"
+                type="date"
+                label="Created at"
+                InputLabelProps={{ shrink: true }}
+                variant="standard"
+                value={ query.get('created_at') ? query.get('created_at') : '' }
+                sx={{width: 180}}
+                onChange={handleChange}
+            />
         </div>
-    )
+    );
 };
 
 export {

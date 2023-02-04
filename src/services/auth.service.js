@@ -1,8 +1,8 @@
 import { axiosService } from "./axios.service";
 import { urls } from "../configs";
 
-const _accessTokenKey = 'accessToken'
-const _refreshTokenKey = 'refreshToken'
+const _accessTokenKey = 'accessToken';
+const _refreshTokenKey = 'refreshToken';
 
 
 const authService = {

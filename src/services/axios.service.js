@@ -1,5 +1,5 @@
 import axios from "axios";
-import {createBrowserHistory} from 'history'
+import { createBrowserHistory } from 'history';
 
 import { baseURL } from "../configs";
 import { authService } from "./auth.service";
@@ -8,7 +8,7 @@ const history = createBrowserHistory();
 
 const axiosService = axios.create({baseURL});
 
-let isRefreshing = false
+let isRefreshing = false;
 
 axiosService.interceptors.request.use((config) => {
     const accessToken = authService.getAccessToken();
