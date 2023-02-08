@@ -11,6 +11,7 @@ const PaidTableHead = (props) => {
     return(
         <TableHead>
             <TableRow>
+                    <TableCell>№</TableCell>
                 {colums.map(colum => (
                     <TableCell
                         key={colum.field}

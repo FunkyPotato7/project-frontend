@@ -7,7 +7,6 @@ import css from "./SearchFields.module.css";
 const SearchFields = () => {
     const [ query, setQuery ] = useSearchParams();
 
-    //phone input, tfoot err, id`s, clear code, comment window
 
     const handleChange = (e) => {
 
@@ -21,87 +20,119 @@ const SearchFields = () => {
 
     };
 
+    const courses = [' ', 'FE', 'FS', 'JCX', 'JSCX', 'PCX', 'QACX'];
+    const formats = [' ', 'online', 'static'];
+    const types = [' ', 'incubator', 'minimal', 'premium', 'pro', 'vip'];
+    const statuses = [' ', 'Согласен', 'Не соласен', 'Дубляж', 'В работе', 'Новый'];
+    const groups = [' ', 'qwerty', 'вреорео'];
+
 
     return(
         <div className={css.fields}>
-            <TextField name="name" label="Name" variant="standard" value={ query.get('name') ? query.get('name') : '' } sx={{width: 120}} onChange={handleChange}/>
-            <TextField name="surname" label="Surname" variant="standard" value={ query.get('surname') ? query.get('surname') : '' } sx={{width: 150}} onChange={handleChange}/>
-            <TextField name="age" label="Age" variant="standard" value={ query.get('age') ? query.get('age') : '' } sx={{width: 80}} onChange={handleChange}/>
-            <TextField name="email"  label="Email" type="email" value={ query.get('email') ? query.get('email') : '' } variant="standard" sx={{width: 210}} onChange={handleChange}/>
-            <TextField name="phone" label="Phone" type="tel" variant="standard" value={ query.get('phone') ? query.get('phone') : '' } sx={{width: 160}} onChange={handleChange}/>
+            <TextField
+                name="name"
+                label="Name"
+                variant="standard"
+                size="small"
+                value={ query.get('name') ? query.get('name') : '' }
+                sx={{width: 120}}
+                onChange={handleChange}
+            />
+            <TextField
+                name="surname"
+                label="Surname"
+                variant="standard"
+                size="small"
+                value={ query.get('surname') ? query.get('surname') : '' }
+                sx={{width: 150}}
+                onChange={handleChange}
+            />
+            <TextField
+                name="age"
+                label="Age"
+                variant="standard"
+                size="small"
+                value={ query.get('age') ? query.get('age') : '' }
+                sx={{width: 80}}
+                onChange={handleChange}
+            />
+            <TextField
+                name="email"
+                label="Email"
+                type="email"
+                size="small"
+                value={ query.get('email') ? query.get('email') : '' }
+                variant="standard" sx={{width: 210}}
+                onChange={handleChange}
+            />
+            <TextField
+                name="phone"
+                label="Phone"
+                type="tel"
+                variant="standard"
+                size="small"
+                value={ query.get('phone') ? query.get('phone') : '' }
+                sx={{width: 160}}
+                onChange={handleChange}
+            />
             <FormControl variant="standard" sx={{width: 120}}>
-                <InputLabel id="simple-select-course">Course</InputLabel>
+                <InputLabel id="select-course">Course</InputLabel>
                 <Select
                     name='course'
                     defaultValue=''
+                    size="small"
                     onChange={handleChange}
                     value={ query.get('course') ? query.get('course') : '' }
                 >
-                    <MenuItem value={''}> </MenuItem>
-                    <MenuItem value={'FE'} >FE</MenuItem>
-                    <MenuItem value={'FS'}>FS</MenuItem>
-                    <MenuItem value={'JCX'}>JCX</MenuItem>
-                    <MenuItem value={'JSCX'}>JSCX</MenuItem>
-                    <MenuItem value={'PCX'}>PCX</MenuItem>
-                    <MenuItem value={'QACX'}>QACX</MenuItem>
+                    {courses.map(course => <MenuItem value={ course === ' ' ? '' : course }>{course}</MenuItem>)}
                 </Select>
             </FormControl>
             <FormControl variant="standard" sx={{width: 180}}>
-                <InputLabel id="simple-select-course_format">Course Format</InputLabel>
+                <InputLabel id="select-course_format">Course Format</InputLabel>
                 <Select
                     name='course_format'
                     defaultValue=''
+                    size="small"
                     onChange={handleChange}
                     value={ query.get('course_format') ? query.get('course_format') : '' }
                 >
-                    <MenuItem value=''> </MenuItem>
-                    <MenuItem value={'online'}>online</MenuItem>
-                    <MenuItem value={'static'}>static</MenuItem>
+                    {formats.map(format => <MenuItem value={ format === ' ' ? '' : format }>{format}</MenuItem>)}
                 </Select>
             </FormControl>
             <FormControl variant="standard" sx={{width: 180}}>
-                <InputLabel id="simple-select-course_format">Course Type</InputLabel>
+                <InputLabel id="select-course_format">Course Type</InputLabel>
                 <Select
                     name='course_type'
                     defaultValue=''
+                    size="small"
                     onChange={handleChange}
                     value={ query.get('course_type') ? query.get('course_type') : '' }
                 >
-                    <MenuItem value=''> </MenuItem>
-                    <MenuItem value={'incubator'}>incubator</MenuItem>
-                    <MenuItem value={'minimal'}>minimal</MenuItem>
-                    <MenuItem value={'premium'}>premium</MenuItem>
-                    <MenuItem value={'pro'}>pro</MenuItem>
-                    <MenuItem value={'vip'}>vip</MenuItem>
+                    {types.map(type => <MenuItem value={ type === ' ' ? '' : type }>{type}</MenuItem>)}
                 </Select>
             </FormControl>
             <FormControl variant="standard" sx={{width: 120}}>
-                <InputLabel id="simple-select-course_format">Status</InputLabel>
+                <InputLabel id="select-course_format">Status</InputLabel>
                 <Select
                     name='status'
                     defaultValue=''
+                    size="small"
                     onChange={handleChange}
                     value={ query.get('status') ? query.get('status') : '' }
                 >
-                    <MenuItem value=''> </MenuItem>
-                    <MenuItem value={'Соласен'}>Соласен</MenuItem>
-                    <MenuItem value={'Не соласен'}>Не соласен</MenuItem>
-                    <MenuItem value={'Дубляж'}>Дубляж</MenuItem>
-                    <MenuItem value={'В работе'}>В работе</MenuItem>
-                    <MenuItem value={'Новый'}>Новый</MenuItem>
+                    {statuses.map(status => <MenuItem value={ status === ' ' ? '' : status }>{status}</MenuItem>)}
                 </Select>
             </FormControl>
             <FormControl variant="standard" sx={{width: 120}}>
-                <InputLabel id="simple-select-course_format">Group</InputLabel>
+                <InputLabel id="select-course_format">Group</InputLabel>
                 <Select
                     name='group'
                     defaultValue=''
+                    size="small"
                     onChange={handleChange}
                     value={ query.get('group') ? query.get('group') : '' }
                 >
-                    <MenuItem value=''> </MenuItem>
-                    <MenuItem value={'qwerty'}>qwerty</MenuItem>
-                    <MenuItem value={'вреорео'}>вреорео</MenuItem>
+                    {groups.map(group => <MenuItem value={ group === ' ' ? '' : group }>{group}</MenuItem>)}
                 </Select>
             </FormControl>
             <TextField
@@ -112,6 +143,7 @@ const SearchFields = () => {
                 variant="standard"
                 value={ query.get('created_at') ? query.get('created_at') : '' }
                 sx={{width: 180}}
+                size="small"
                 onChange={handleChange}
             />
         </div>

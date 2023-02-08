@@ -4,14 +4,14 @@ import { useDispatch, useSelector } from "react-redux";
 import {
     Box,
     Table,
-    TableContainer,
-    TableFooter,
-    TablePagination,
     TableRow,
     TableCell,
     LinearProgress,
+    TableContainer,
+    TablePagination,
 } from "@mui/material";
 
+import css from './PaidTable.module.css';
 import { colums } from "../../configs";
 import { paidActions } from "../../store";
 import { PaidTableHead, PaidTableBody } from '../../components';
@@ -32,34 +32,6 @@ const PaidTable = () => {
         [dispatch, query, setQuery]);
 
 
-    // const descendingComparator = (a, b, orderBy) => {
-    //     if (b[orderBy] < a[orderBy]) {
-    //         return -1;
-    //     }
-    //     if (b[orderBy] > a[orderBy]) {
-    //         return 1;
-    //     }
-    //     return 0;
-    // }
-    //
-    // const getComparator = (order, orderBy) => {
-    //     return order === 'desc'
-    //         ? (a, b) => descendingComparator(a, b, orderBy)
-    //         : (a, b) => -descendingComparator(a, b, orderBy);
-    // }
-    //
-    // const stableSort = (array, comparator) => {
-    //     const stabilizedThis = array.map((el, index) => [el, index]);
-    //     stabilizedThis.sort((a, b) => {
-    //         const order = comparator(a[0], b[0]);
-    //         if (order !== 0) {
-    //             return order;
-    //         }
-    //         return a[1] - b[1];
-    //     });
-    //     return stabilizedThis.map((el) => el[0]);
-    // }
-
     const handleChangePage = (event, newPage) => {
         query.set('page', `${newPage + 1}`);
         query.delete('limit');
@@ -68,6 +40,7 @@ const PaidTable = () => {
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
+
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(property);
 
@@ -87,13 +60,12 @@ const PaidTable = () => {
 
 
     return(
-        <Box sx={{position: 'relative', overflow: 'hidden', maxHeight: '87.4%'}}>
-            {isLoading && <LinearProgress/>}
-            <TableContainer sx={{maxHeight: '94%'}}>
+        <Box className={css.box}>
+            <TableContainer className={css.container}>
+                {isLoading && <LinearProgress/>}
                 <Table
                     stickyHeader
-                    sx={{ minWidth: 750 }}
-                    aria-label="simple table"
+                    className={css.table}
                 >
                     <PaidTableHead
                         colums={colums}
@@ -101,14 +73,13 @@ const PaidTable = () => {
                         orderBy={orderBy}
                         onRequestSort={handleRequestSort}
                     />
-                    {/*{stableSort(paids, getComparator(order, orderBy))*/}
                     {paids.map(paid => (
-                            <PaidTableBody
-                                key={paid.id}
-                                paid={paid}
-                                emptyRows={emptyRows}
-                            />
-                        ))
+                        <PaidTableBody
+                            key={paid.id}
+                            paid={paid}
+                            emptyRows={emptyRows}
+                        />
+                    ))
                     }
                     {emptyRows > 0 && (
                         <TableRow
@@ -119,18 +90,15 @@ const PaidTable = () => {
                     )}
                 </Table>
             </TableContainer>
-            <TableFooter sx={{display: 'flex', justifyContent: 'flex-end'}}>
-                <TableRow>
-                    <TablePagination
-                        align="right"
-                        count={totalCount}
-                        rowsPerPage={countOnPage}
-                        rowsPerPageOptions={[30]}
-                        page={currentPage - 1}
-                        onPageChange={handleChangePage}
-                    />
-                </TableRow>
-            </TableFooter>
+            <TablePagination
+                align="right"
+                component="div"
+                count={totalCount}
+                rowsPerPage={countOnPage}
+                rowsPerPageOptions={[30]}
+                page={currentPage - 1}
+                onPageChange={handleChangePage}
+            />
         </Box>
     );
 };
