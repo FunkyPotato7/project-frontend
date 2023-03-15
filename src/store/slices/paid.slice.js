@@ -1,8 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+
 import { paidService } from "../../services";
 
 const initialState = {
     paids: [],
+    updatedPaid: null,
+    statistic: [],
     totalCount: 0,
     currentPage: 1,
     countOnPage: 1,
@@ -23,6 +26,30 @@ const getAll = createAsyncThunk(
     }
 );
 
+const getStatistic = createAsyncThunk(
+    "paidSlice/getStatistic",
+    async (_, {rejectedWithValue}) => {
+        try {
+            const { data } = await paidService.statistic();
+            return data
+        } catch (e) {
+            return rejectedWithValue(e.response.data);
+        }
+    }
+);
+
+const update = createAsyncThunk(
+    "paidSlice/update",
+    async (data, {rejectedWithValue}) => {
+        const { id, info } = data
+        try {
+            const { data } = await paidService.update(id, info);
+            return data
+        } catch (e) {
+            return rejectedWithValue(e.response.data);
+        }
+    }
+);
 
 const paidSlice = createSlice({
     name: 'paidSlice',
@@ -46,12 +73,23 @@ const paidSlice = createSlice({
             .addCase(getAll.rejected, (state, action) => {
                 state.error = true;
             })
+            .addCase(getStatistic.fulfilled, (state, action) => {
+                state.statistic = action.payload;
+                state.error = false;
+            })
+            .addCase(update.fulfilled, (state, action) => {
+                state.updatedPaid = action.payload;
+                state.isLoading = false;
+                state.error = false;
+            })
 });
 
 const {reducer: paidReducer} = paidSlice;
 
 const paidActions = {
-    getAll
+    getAll,
+    getStatistic,
+    update
 };
 
 export {

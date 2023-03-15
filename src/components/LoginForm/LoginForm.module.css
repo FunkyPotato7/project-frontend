@@ -1,8 +1,10 @@
-.loginForm {
-    position: relative;
+.LoginForm {
+    position: absolute;
     top: 200px;
     width: 300px;
+    height: 300px;
 
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
 }

@@ -64,6 +64,11 @@ const colums = [
         headerName: 'Created at',
         width: 170,
     },
+    {
+        field: 'manager',
+        headerName: 'Manager',
+        width: 140
+    }
 ];
 
 export {

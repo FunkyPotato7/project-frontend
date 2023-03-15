@@ -1,24 +1,28 @@
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import { format, parseISO } from 'date-fns';
 import { TableBody, TableCell, TableRow } from "@mui/material";
 
-import { PaidMenu } from "../PaidMenu/PaidMenu";
+import { CollapsedMenu } from "../CollapsedMenu/CollapsedMenu";
 
 
 const PaidTableBody = (props) => {
-    const { paid } = props
+    let { value, handleSnackOpen } = props
 
-    const [open, setOpen] = useState(false);
+    const [paid, setPaid] = useState([]);
+    const [collapse, setCollapse] = useState(false);
 
+    useEffect(() => {
+        setPaid(value);
+    },
+        [value]);
 
-    const handler = () => {
-        setOpen(!open)
+    const collapseHandler = () => {
+        setCollapse(!collapse)
     };
-
 
     return (
         <TableBody>
-                <TableRow hover onClick={() => handler()}>
+                <TableRow hover onClick={() => collapseHandler()}>
                     <TableCell>{paid.id}</TableCell>
                     <TableCell>{paid.name ? paid.name : 'null'}</TableCell>
                     <TableCell>{paid.surname ? paid.surname : 'null'}</TableCell>
@@ -33,8 +37,9 @@ const PaidTableBody = (props) => {
                     <TableCell>{paid.already_paid ? paid.already_paid : 'null'}</TableCell>
                     <TableCell>{paid.group ? paid.group : 'null'}</TableCell>
                     <TableCell>{paid.created_at ? format(parseISO(paid.created_at),'d MMM yyyy') : 'null'}</TableCell>
+                    <TableCell>{paid.manager ? paid.manager.name : 'null'}</TableCell>
                 </TableRow>
-            <PaidMenu paid={paid} open={open}/>
+            <CollapsedMenu paid={paid} setPaid={setPaid} collapse={collapse} handleSnackOpen={handleSnackOpen} />
         </TableBody>
     );
 };

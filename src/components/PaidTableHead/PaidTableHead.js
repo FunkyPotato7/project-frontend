@@ -4,7 +4,7 @@ import TableSortLabel from "@mui/material/TableSortLabel";
 const PaidTableHead = (props) => {
     const {colums, order, orderBy, onRequestSort} = props;
 
-    const createSortHandler = (property) => (event) => {
+    const SortHandler = (property) => (event) => {
         onRequestSort(event, property);
     };
 
@@ -19,9 +19,9 @@ const PaidTableHead = (props) => {
                         sortDirection={orderBy === colum.field ? order : false}
                     >
                         <TableSortLabel
-                            active={orderBy === colum.field}
+                            active={orderBy === colum.field || orderBy === `-${colum.field}`}
                             direction={orderBy === colum.field ? order : 'asc'}
-                            onClick={createSortHandler(colum.field)}
+                            onClick={SortHandler(colum.field)}
                         >
                             {colum.headerName}
                         </TableSortLabel>

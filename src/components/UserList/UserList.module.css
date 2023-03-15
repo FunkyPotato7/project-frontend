@@ -1,0 +1,42 @@
+.UserList {
+    display: flex;
+    flex-direction: column;
+
+    height: 100%;
+    padding: 10px;
+    overflow: scroll;
+}
+
+.Modal {
+    display: flex;
+}
+
+.Box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    padding: 34px;
+    border-radius: 4px;
+    box-shadow: 1px 1px 20px black;
+    background-color: white;
+    transform: translate(-50%, -50%);
+}
+
+.Form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.Buttons {
+    display: flex;
+    justify-content: space-between;
+
+    width: 220px;
+    margin-top: 10px;
+}

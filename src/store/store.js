@@ -1,13 +1,13 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 
-import { paidReducer } from "./slices";
+import { paidReducer, userReducer } from "./slices";
 
 const rootReducer = combineReducers({
     paidReducer,
-
+    userReducer
 });
 
-const store = configureStore({
+let store = configureStore({
     reducer: rootReducer
 });
 

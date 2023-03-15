@@ -1,36 +1,42 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import FileDownload from "js-file-download";
 import {
     Box,
+    Modal,
     Table,
-    TableRow,
-    TableCell,
+    Button,
     LinearProgress,
     TableContainer,
-    TablePagination,
+    TablePagination
 } from "@mui/material";
+import AssessmentTwoToneIcon from '@mui/icons-material/AssessmentTwoTone';
+import FileDownloadTwoToneIcon from '@mui/icons-material/FileDownloadTwoTone';
 
 import css from './PaidTable.module.css';
 import { colums } from "../../configs";
 import { paidActions } from "../../store";
-import { PaidTableHead, PaidTableBody } from '../../components';
+import { paidService } from "../../services";
+import { PaidTableHead, PaidTableBody, SearchFields, Statistic } from '../../components';
 
 
-const PaidTable = () => {
-    const { paids, totalCount, currentPage, countOnPage, isLoading } = useSelector(state => state.paidReducer);
-    const [query, setQuery] = useSearchParams({ limit: '30' });
+const PaidTable = ({handleSnackOpen}) => {
+    const { paids, statistic, totalCount, currentPage, countOnPage, isLoading } = useSelector(state => state.paidReducer);
+    const [query, setQuery] = useSearchParams({limit: '30'});
     const dispatch = useDispatch();
 
-    const [order, setOrder] = useState('asc');
+    const [order, setOrder] = useState('');
     const [orderBy, setOrderBy] = useState(query.get('order') || 'id');
-
+    const [open, setOpen] = useState(false);
 
     useEffect(() => {
             dispatch(paidActions.getAll(query));
+            dispatch(paidActions.getStatistic());
         },
         [dispatch, query, setQuery]);
 
+    const handleOpen = () => setOpen(!open);
 
     const handleChangePage = (event, newPage) => {
         query.set('page', `${newPage + 1}`);
@@ -39,33 +45,44 @@ const PaidTable = () => {
     };
 
     const handleRequestSort = (event, property) => {
-        const isAsc = orderBy === property && order === 'asc';
-
-        setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(property);
 
-        if (isAsc) {
-            query.set('order', `-${property}`)
+        if (order === '') {
+            setOrder('desc');
+            query.set('order', `-${property}`);
+        } else if (order === 'desc') {
+            setOrder('asc');
+            query.set('order', `${property}`);
         } else {
-            query.set('order', `${property}`)
+            setOrder('');
+            setOrderBy(null);
+            query.delete('order');
         }
 
         query.delete('limit');
+        setQuery(query);
+    };
 
-        setQuery(query)
+    const download = async () => {
+        const response = await paidService.export(query);
+        FileDownload(response.data, "paid.xlsx");
     };
 
 
-    const emptyRows = currentPage > 0 ? Math.max(0, (currentPage - 25) * countOnPage - paids.length) : 0;
-
-
     return(
-        <Box className={css.box}>
-            <TableContainer className={css.container}>
-                {isLoading && <LinearProgress/>}
+        <Box className={css.MainBox}>
+            {isLoading && <LinearProgress/>}
+            <TableContainer className={css.Container}>
+                <Box className={css.NavBar}>
+                    <SearchFields/>
+                    <div>
+                        <Button onClick={handleOpen}><AssessmentTwoToneIcon/></Button>
+                        <Button onClick={download}><FileDownloadTwoToneIcon/></Button>
+                    </div>
+                </Box>
                 <Table
                     stickyHeader
-                    className={css.table}
+                    className={css.Table}
                 >
                     <PaidTableHead
                         colums={colums}
@@ -76,18 +93,10 @@ const PaidTable = () => {
                     {paids.map(paid => (
                         <PaidTableBody
                             key={paid.id}
-                            paid={paid}
-                            emptyRows={emptyRows}
+                            value={paid}
+                            handleSnackOpen={handleSnackOpen}
                         />
-                    ))
-                    }
-                    {emptyRows > 0 && (
-                        <TableRow
-                            style={{height: 53 * emptyRows}}
-                        >
-                            <TableCell colSpan={6} />
-                        </TableRow>
-                    )}
+                    ))}
                 </Table>
             </TableContainer>
             <TablePagination
@@ -99,6 +108,16 @@ const PaidTable = () => {
                 page={currentPage - 1}
                 onPageChange={handleChangePage}
             />
+            <Modal
+                className={css.Modal}
+                open={open}
+                onClose={handleOpen}
+            >
+                <Box className={css.Box}>
+                    <h3>Statistic by statuses</h3>
+                    <Statistic statistic={statistic}/>
+                </Box>
+            </Modal>
         </Box>
     );
 };
