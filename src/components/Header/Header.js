@@ -15,8 +15,6 @@ const Header = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    //axiosService routing, activate 401 err, !styles, ??rewrite search fields
-
     useEffect(() => {
         !user && dispatch(userActions.getAuthUser());
     }, [dispatch, user]);
