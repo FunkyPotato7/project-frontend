@@ -13,6 +13,7 @@ import {
 import css from "./SearchFields.module.css";
 import { courses, types, statuses, groups, formats } from "../../configs";
 
+
 const SearchFields = () => {
     const [ query, setQuery ] = useSearchParams();
 
@@ -22,7 +23,8 @@ const SearchFields = () => {
         setMy(!my);
     }
 
-    const handleChange = (e) => {
+
+    const search = (e) => {
 
         if (e.target.value) {
             query.set(e.target.name, e.target.value);
@@ -36,7 +38,7 @@ const SearchFields = () => {
 
 
     return(
-        <div className={css.fields} onChange={handleChange}>
+        <div className={css.fields} onChange={search}>
                 <TextField
                     name="name"
                     label="Name"
@@ -86,7 +88,7 @@ const SearchFields = () => {
                         defaultValue=''
                         size="small"
                         value={ query.get('course') ? query.get('course') : '' }
-                        onChange={handleChange}
+                        onChange={search}
                     >
                         {courses.map(course => <MenuItem key={course} value={ course === ' ' ? '' : course }>{course}</MenuItem>)}
                     </Select>
@@ -98,7 +100,7 @@ const SearchFields = () => {
                         defaultValue=''
                         size="small"
                         value={ query.get('course_format') ? query.get('course_format') : '' }
-                        onChange={handleChange}
+                        onChange={search}
                     >
                         {formats.map(format => <MenuItem key={format} value={ format === ' ' ? '' : format }>{format}</MenuItem>)}
                     </Select>
@@ -110,7 +112,7 @@ const SearchFields = () => {
                         defaultValue=''
                         size="small"
                         value={ query.get('course_type') ? query.get('course_type') : '' }
-                        onChange={handleChange}
+                        onChange={search}
                     >
                         {types.map(type => <MenuItem key={type} value={ type === ' ' ? '' : type }>{type}</MenuItem>)}
                     </Select>
@@ -122,7 +124,7 @@ const SearchFields = () => {
                         defaultValue=''
                         size="small"
                         value={ query.get('status') ? query.get('status') : '' }
-                        onChange={handleChange}
+                        onChange={search}
                     >
                         {statuses.map(status => <MenuItem key={status} value={ status === ' ' ? '' : status }>{status}</MenuItem>)}
                     </Select>
@@ -134,7 +136,7 @@ const SearchFields = () => {
                         defaultValue=''
                         size="small"
                         value={ query.get('group') ? query.get('group') : '' }
-                        onChange={handleChange}
+                        onChange={search}
                     >
                         {groups.map(group => <MenuItem key={group} value={ group === ' ' ? '' : group }>{group}</MenuItem>)}
                     </Select>
