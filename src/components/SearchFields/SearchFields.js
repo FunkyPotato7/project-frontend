@@ -67,7 +67,8 @@ const SearchFields = () => {
                     type="email"
                     size="small"
                     value={ query.get('email') ? query.get('email') : '' }
-                    variant="standard" sx={{width: 210}}
+                    variant="standard"
+                    sx={{width: 210}}
                 />
                 <TextField
                     name="phone"

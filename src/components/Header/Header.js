@@ -1,8 +1,7 @@
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Button } from "@mui/material";
-import { Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 
 import css from './Header.module.css';
 import { muiStyle } from './muiStyle';

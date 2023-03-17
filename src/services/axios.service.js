@@ -6,8 +6,8 @@ import { authService } from "./auth.service";
 
 const history = createBrowserHistory();
 
-const axiosService = axios.create({baseURL});
 
+const axiosService = axios.create({baseURL});
 
 axiosService.interceptors.request.use((config) => {
     const accessToken = authService.getAccessToken();
@@ -27,6 +27,9 @@ axiosService.interceptors.response.use((config) => {
     async (error) => {
         const refreshToken = authService.getRefreshToken();
 
+        console.log(history.location);
+        console.log(error);
+
         if (error.response?.status === 401 && refreshToken && !isRefreshing) {
             isRefreshing = true
 
@@ -42,13 +45,9 @@ axiosService.interceptors.response.use((config) => {
 
         }
 
-        if (error.response?.status === 401) {
-            console.log(error);
-            history.replace('/login');
-        }
-
-        if (error.response?.status === 403) {
-            history.replace('/bannedPage');
+        if (error.response?.status === 403 && history.location.pathname !== '/bannedPage') {
+            history.push('/bannedPage');
+            return axiosService(error.config);
         }
 
         return Promise.reject(error);
