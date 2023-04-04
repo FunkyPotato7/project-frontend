@@ -29,6 +29,7 @@ const Header = () => {
 
     const logout = async () => {
         await authService.logout();
+        await authService.deleteTokens();
         navigate('/login');
     }
 

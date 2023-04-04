@@ -7,7 +7,7 @@ export * from './LoginForm/LoginForm';
 export * from './PaidTable/PaidTable';
 export * from './PaidTableBody/PaidTableBody';
 export * from './PaidTableHead/PaidTableHead';
-export * from './SearchFields/SearchFields';
+export * from './SearchForm/SearchForm';
 export * from './User/User';
 export * from './UserList/UserList';
 export * from './Statistic/Statistic';

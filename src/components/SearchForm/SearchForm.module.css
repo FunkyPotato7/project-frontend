@@ -1,0 +1,16 @@
+.Form {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.Fields {
+    display: flex;
+    align-items: flex-end;
+
+    margin: 0 10px 0 10px;
+}
+
+.Buttons {
+    display: flex;
+}

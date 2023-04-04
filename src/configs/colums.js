@@ -17,7 +17,7 @@ const colums = [
     {
         field: 'email',
         headerName: 'Email',
-        width: 230,
+        width: 210,
     },
     {
         field: 'phone',

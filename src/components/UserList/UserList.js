@@ -30,12 +30,13 @@ const UserList = ({handleSnackOpen}) => {
 
     const handleOpen = () => setOpen(!open);
 
-    const submit = async (user) => {
+    const create = async (user) => {
         try {
             const { data } = await adminService.create(user);
 
             dispatch(userActions.getAll());
             setToken(data.actionToken);
+
             handleOpen();
         } catch (e) {
             setError("email", { message: e.response.data });
@@ -53,7 +54,7 @@ const UserList = ({handleSnackOpen}) => {
                 onClose={handleOpen}
             >
                 <Box className={css.Box}>
-                    <form className={css.Form} onSubmit={handleSubmit(submit)}>
+                    <form className={css.Form} onSubmit={handleSubmit(create)}>
                         <TextField
                             sx={style.TextField}
                             label="Name"

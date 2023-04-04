@@ -51,7 +51,7 @@ form {
 
 .ModalBox {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
 
     position: absolute;

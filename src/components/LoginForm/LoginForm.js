@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { Button, TextField } from "@mui/material";
-import SuccessSlider  from '@mui/material/Slider';
 
 import css from './LoginForm.module.css';
 import { authService } from "../../services";
@@ -29,7 +28,8 @@ const LoginForm = () => {
             navigate('/paid?page=1');
 
         } catch (e) {
-            setError(e.response.data.slice(6), { message: e.response.data });
+            setError('email', { message: 'Wrong email or password' });
+            setError('password', { message: 'Wrong email or password' });
         }
 
     };

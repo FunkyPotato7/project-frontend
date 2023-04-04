@@ -12,12 +12,15 @@ const authService = {
     activate: (token, password) => axiosService.post(urls.auth.activate(token), { password }),
 
     setTokens: ({accessToken, refreshToken}) =>  {
-        localStorage.setItem(_accessTokenKey, accessToken)
-        localStorage.setItem(_refreshTokenKey, refreshToken)
+        localStorage.setItem(_accessTokenKey, accessToken);
+        localStorage.setItem(_refreshTokenKey, refreshToken);
+    },
+    deleteToken: (token) => {
+        localStorage.removeItem(token);
     },
     deleteTokens: () => {
-        localStorage.removeItem(_accessTokenKey)
-        localStorage.removeItem(_refreshTokenKey)
+        localStorage.removeItem(_accessTokenKey);
+        localStorage.removeItem(_refreshTokenKey);
     },
 
     getAccessToken: () => localStorage.getItem(_accessTokenKey),

@@ -35,7 +35,7 @@ const PaidTableBody = (props) => {
                     <TableCell>{paid.status ? paid.status : 'null'}</TableCell>
                     <TableCell>{paid.sum ? paid.sum : 'null'}</TableCell>
                     <TableCell>{paid.already_paid ? paid.already_paid : 'null'}</TableCell>
-                    <TableCell>{paid.group ? paid.group : 'null'}</TableCell>
+                    <TableCell>{paid.group ? paid.group.name : 'null'}</TableCell>
                     <TableCell>{paid.created_at ? format(parseISO(paid.created_at),'d MMM yyyy') : 'null'}</TableCell>
                     <TableCell>{paid.manager ? paid.manager.name : 'null'}</TableCell>
                 </TableRow>

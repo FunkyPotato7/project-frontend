@@ -22,7 +22,9 @@ const User = ({userData, actionToken, handleSnackOpen}) => {
     };
 
     const copy = () => {
-        let activateLink = `http://localhost:3000/activate/${token}`;
+        const link = 'http://localhost:3000/activate/'
+        const activateLink = link + token;
+
         handleSnackOpen();
         return navigator.clipboard.writeText(activateLink);
     };

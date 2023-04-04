@@ -1,6 +1,12 @@
 .MainBox {
-    max-height: 89%;
+    height: 100%;
     position: relative;
+}
+
+.Container {
+    position: relative;
+    min-height: 84%;
+    max-height: 84%;
 }
 
 .NavBar {
@@ -11,9 +17,8 @@
     padding-right: 10px;
 }
 
-.Container {
-    position: relative;
-    max-height: 95%;
+.Buttons {
+    display: flex;
 }
 
 .Table {

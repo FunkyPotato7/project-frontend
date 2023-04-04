@@ -25,10 +25,8 @@ axiosService.interceptors.response.use((config) => {
         return config;
     },
     async (error) => {
+        // const accessToken = authService.getAccessToken();
         const refreshToken = authService.getRefreshToken();
-
-        console.log(history.location);
-        console.log(error);
 
         if (error.response?.status === 401 && refreshToken && !isRefreshing) {
             isRefreshing = true
@@ -45,8 +43,15 @@ axiosService.interceptors.response.use((config) => {
 
         }
 
-        if (error.response?.status === 403 && history.location.pathname !== '/bannedPage') {
+        // if (error.response?.status === 401) {
+        //     history.push('/login');
+        //     authService.deleteTokens();
+        //     return axiosService(error.config);
+        // }
+
+        if (error.response?.status === 403) {
             history.push('/bannedPage');
+            authService.deleteToken('refreshToken');
             return axiosService(error.config);
         }
 

@@ -1,7 +1,7 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { joiResolver } from '@hookform/resolvers/joi';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
     Box,
     Button,
@@ -19,34 +19,49 @@ import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import FolderSharedIcon from '@mui/icons-material/FolderShared';
 
 import css from './CollapsedMenu.module.css';
-import { courses, types, statuses, groups, formats } from "../../configs";
+import { courses, types, statuses, formats } from "../../configs";
 import { paidValidator } from "../../validators";
+import { groupsService, paidService } from "../../services";
+import { paidActions } from "../../store";
 import { Comment } from "../Comment/Comment";
-import { paidService } from "../../services";
 
 
 const CollapsedMenu = (props) => {
     const { collapse, paid, setPaid, handleSnackOpen } = props;
 
     const { user } = useSelector(store => store.userReducer);
+    const { groups } = useSelector(store => store.paidReducer);
+    const { register: createGroupForm, handleSubmit: createHandleSubmit, setValue: setCreateValue } = useForm();
     const { register, handleSubmit, setValue, formState: { errors } } = useForm({
         mode: "onSubmit",
         resolver: joiResolver(paidValidator)
     });
+    const dispatch = useDispatch();
 
     const [comments, setComments] = useState([]);
-    const [open, setOpen] = useState(false);
+    const [openUpdate, setOpenUpdate] = useState(false);
+    const [openCreate, setOpenCreate] = useState(false);
+    const [selectedGroup, setSelectedGroup] = useState('');
 
     useEffect(() => {
         setComments(paid.comments);
+        setSelectedGroup(paid.group ? paid.group._id : '');
     },
-        [paid.comments]);
+        [paid.comments, paid.group]);
 
 
-    const handleOpen = () => setOpen(!open);
+    const handleOpenUpdate = () => {
+        setValue('comment', '');
+        setOpenUpdate(!openUpdate);
+    }
+
+    const handleOpenCreate = () => {
+        setSelectedGroup('');
+        setCreateValue('name', '');
+        setOpenCreate(!openCreate);
+    }
 
     const update = async (info) => {
-        console.log(info);
         if (info.comment) {
             info.status = 'In work';
         }
@@ -59,8 +74,23 @@ const CollapsedMenu = (props) => {
 
         setPaid({id: paid.id, ...data});
         setValue('comment', '');
-        setOpen(false);
-        handleSnackOpen();
+
+        if (!info.comment) {
+            handleOpenUpdate();
+            handleSnackOpen();
+        }
+    };
+
+    const createGroup = async (name) => {
+        const { data } = await groupsService.create(name);
+        await dispatch(paidActions.getAllGroups());
+
+        setSelectedGroup(data._id);
+        setOpenCreate(false);
+    };
+
+    const handleChange = (event) => {
+        setSelectedGroup(event.target.value);
     };
 
     return(
@@ -91,11 +121,11 @@ const CollapsedMenu = (props) => {
                                     />
                                 </form>
                             </div>
-                            <Button className={css.updateBtn} sx={{borderRadius: 50, margin: 1}} disabled={!!(user.profile?._id !== paid.manager?._id && paid.manager?._id)} onClick={handleOpen}><ModeEditIcon/></Button>
+                            <Button sx={{borderRadius: 50, margin: 1}} disabled={!!(user.profile?._id !== paid.manager?._id && paid.manager?._id)} onClick={handleOpenUpdate}><ModeEditIcon/></Button>
                             <Modal
                                 className={css.Modal}
-                                open={open}
-                                onClose={handleOpen}
+                                open={openUpdate}
+                                onClose={handleOpenUpdate}
                             >
                                 <Box className={css.ModalBox}>
                                     <form className={css.Form} onSubmit={handleSubmit(update)}>
@@ -103,23 +133,29 @@ const CollapsedMenu = (props) => {
                                             <FolderSharedIcon sx={{fontSize: 65, color: "#1976d2"}}/>
                                             <Box className={css.HeaderFields}>
                                                 <FormControl>
-                                                    <InputLabel id="select-group">Group</InputLabel>
-                                                    <Select
-                                                        className={css.Select}
-                                                        label="Group"
-                                                        defaultValue={ paid.group ? paid.group : '' }
-                                                        {...register('group')}
-                                                    >{groups.map(group => <MenuItem key={group} value={ group === ' ' || null ? '' : group }>{group}</MenuItem>)}</Select>
+                                                    <InputLabel>Group</InputLabel>
+                                                        <Select
+                                                            className={css.Select}
+                                                            label="Group"
+                                                            value={ selectedGroup }
+                                                            {...register("group", {onChange: handleChange})}
+                                                        >
+                                                            <MenuItem value={''}> </MenuItem>
+                                                            <MenuItem value={'create'} onClick={handleOpenCreate}>Create Group</MenuItem>
+                                                            {groups.map(({_id, name}) => <MenuItem key={_id} value={ _id }>{name}</MenuItem>)}
+                                                        </Select>
                                                 </FormControl>
                                                 <FormControl>
-                                                    <InputLabel id="select-status">Status</InputLabel>
+                                                    <InputLabel>Status</InputLabel>
                                                     <Select
                                                         className={css.Select}
                                                         label="Status"
                                                         defaultValue={ !paid.status || paid.status === 'New'
                                                             ? 'In work' : paid.status }
                                                         {...register('status')}
-                                                    >{statuses.map(status => <MenuItem key={status} value={ status === ' ' || null ? '' : status }>{status}</MenuItem>)}</Select>
+                                                    >
+                                                        <MenuItem value={''}> </MenuItem>
+                                                        {statuses.map(status => <MenuItem key={status} value={ status }>{status}</MenuItem>)}</Select>
                                                 </FormControl>
                                             </Box>
                                         </Box>
@@ -184,38 +220,64 @@ const CollapsedMenu = (props) => {
                                                     {...register('already_paid')}
                                                 />
                                                 <FormControl>
-                                                    <InputLabel id="select-course">Course</InputLabel>
+                                                    <InputLabel>Course</InputLabel>
                                                     <Select
                                                         sx={{width: 250, marginBottom: 2}}
                                                         label="Course"
                                                         defaultValue={paid.course}
                                                         {...register('course')}
-                                                    >{courses.map(course => <MenuItem key={course} value={ course === ' ' || null ? '' : course }>{course}</MenuItem>)}</Select>
+                                                    >
+                                                        <MenuItem value={''}> </MenuItem>
+                                                        {courses.map(course => <MenuItem key={course} value={ course }>{course}</MenuItem>)}</Select>
                                                 </FormControl>
                                                 <FormControl>
-                                                    <InputLabel id="select-format">Course Format</InputLabel>
+                                                    <InputLabel>Course Format</InputLabel>
                                                     <Select
                                                         sx={{width: 250, marginBottom: 2}}
                                                         label="Course Format"
                                                         defaultValue={paid.course_format}
                                                         {...register('course_format')}
-                                                    >{formats.map(format => <MenuItem key={format} value={ format === ' ' || null ? '' : format }>{format}</MenuItem>)}</Select>
+                                                    >
+                                                        <MenuItem value={''}> </MenuItem>
+                                                        {formats.map(format => <MenuItem key={format} value={ format }>{format}</MenuItem>)}</Select>
                                                 </FormControl>
                                                 <FormControl>
-                                                    <InputLabel id="select-type">Course Type</InputLabel>
+                                                    <InputLabel>Course Type</InputLabel>
                                                     <Select
                                                         sx={{width: 250, marginBottom: 2}}
                                                         label="Course Type"
                                                         defaultValue={paid.course_type}
                                                         {...register('course_type')}
-                                                    >{types.map(type => <MenuItem key={type} value={ type === ' ' || null ? '' : type }>{type}</MenuItem>)}</Select>
+                                                    >
+                                                        <MenuItem value={''}> </MenuItem>
+                                                        {types.map(type => <MenuItem key={type} value={ type }>{type}</MenuItem>)}</Select>
                                                 </FormControl>
                                             </Box>
                                         </Box>
                                         <Box className={css.Buttons}>
-                                            <Button sx={{fontWeight: "bold"}} variant="outlined" onClick={handleOpen}>Cancel</Button>
+                                            <Button sx={{fontWeight: "bold"}} variant="outlined" onClick={handleOpenUpdate}>Cancel</Button>
                                             <Button sx={{fontWeight: "bold"}} variant="contained" type="submit">Save</Button>
                                         </Box>
+                                    </form>
+                                </Box>
+                            </Modal>
+                            <Modal
+                                className={css.Modal}
+                                open={openCreate}
+                                onClose={handleOpenCreate}
+                            >
+                                <Box className={css.ModalBox}>
+                                    <form onSubmit={createHandleSubmit(createGroup)}>
+                                        <TextField
+                                            sx={{width: 250, marginBottom: 2}}
+                                            label="Group Name"
+                                            autoFocus={true}
+                                            {...createGroupForm('name')}
+                                        />
+                                        <div className={css.Buttons}>
+                                            <Button variant="outlined" onClick={handleOpenCreate}>Cancel</Button>
+                                            <Button sx={{fontWeight: "bold"}} variant="contained" type="submit">Create</Button>
+                                        </div>
                                     </form>
                                 </Box>
                             </Modal>

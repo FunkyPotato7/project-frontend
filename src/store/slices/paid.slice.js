@@ -1,11 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import { paidService } from "../../services";
+import {groupsService, paidService} from "../../services";
 
 const initialState = {
     paids: [],
     updatedPaid: null,
     statistic: [],
+    groups: [],
     totalCount: 0,
     currentPage: 1,
     countOnPage: 1,
@@ -40,9 +41,10 @@ const getStatistic = createAsyncThunk(
 
 const update = createAsyncThunk(
     "paidSlice/update",
-    async (data, {rejectedWithValue}) => {
-        const { id, info } = data
+    async (updateData, {rejectedWithValue}) => {
         try {
+            const { id, info } = updateData
+
             const { data } = await paidService.update(id, info);
             return data
         } catch (e) {
@@ -50,6 +52,18 @@ const update = createAsyncThunk(
         }
     }
 );
+
+const getAllGroups = createAsyncThunk(
+    "paidSlice/getAllGroups",
+    async (_, {rejectedWithValue}) => {
+        try {
+            const { data } = await groupsService.getAll();
+            return data;
+        } catch (e) {
+            return rejectedWithValue(e.response.data);
+        }
+    }
+)
 
 const paidSlice = createSlice({
     name: 'paidSlice',
@@ -82,6 +96,9 @@ const paidSlice = createSlice({
                 state.isLoading = false;
                 state.error = false;
             })
+            .addCase(getAllGroups.fulfilled, (state, action) => {
+                state.groups = action.payload.groups;
+            })
 });
 
 const {reducer: paidReducer} = paidSlice;
@@ -89,7 +106,8 @@ const {reducer: paidReducer} = paidSlice;
 const paidActions = {
     getAll,
     getStatistic,
-    update
+    update,
+    getAllGroups
 };
 
 export {

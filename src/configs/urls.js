@@ -19,6 +19,11 @@ const urls = {
         statistic: '/paid/statistic',
         update: (id) => `/paid/${id}`
     },
+    groups: {
+        getAll: '/groups',
+        create: '/groups',
+    },
+
     user: {
         getAuthUser: '/users/me'
     }

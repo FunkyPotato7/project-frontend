@@ -1,24 +1,19 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import FileDownload from "js-file-download";
 import {
     Box,
     Modal,
     Table,
-    Button,
     LinearProgress,
     TableContainer,
     TablePagination
 } from "@mui/material";
-import AssessmentTwoToneIcon from '@mui/icons-material/AssessmentTwoTone';
-import FileDownloadTwoToneIcon from '@mui/icons-material/FileDownloadTwoTone';
 
 import css from './PaidTable.module.css';
 import { colums } from "../../configs";
 import { paidActions } from "../../store";
-import { paidService } from "../../services";
-import { PaidTableHead, PaidTableBody, SearchFields, Statistic } from '../../components';
+import { PaidTableHead, PaidTableBody, SearchForm, Statistic } from '../../components';
 
 
 const PaidTable = ({handleSnackOpen}) => {
@@ -31,8 +26,8 @@ const PaidTable = ({handleSnackOpen}) => {
     const [open, setOpen] = useState(false);
 
     useEffect(() => {
-            dispatch(paidActions.getAll(query));
-            dispatch(paidActions.getStatistic());
+        dispatch(paidActions.getAll(query));
+        dispatch(paidActions.getStatistic());
         },
         [dispatch, query, setQuery]);
 
@@ -59,27 +54,16 @@ const PaidTable = ({handleSnackOpen}) => {
             query.delete('order');
         }
 
+        query.set('page', '1');
         query.delete('limit');
         setQuery(query);
     };
-
-    const download = async () => {
-        const response = await paidService.export(query);
-        FileDownload(response.data, "paid.xlsx");
-    };
-
 
     return(
         <Box className={css.MainBox}>
             {isLoading && <LinearProgress/>}
             <TableContainer className={css.Container}>
-                <Box className={css.NavBar}>
-                    <SearchFields/>
-                    <div>
-                        <Button onClick={handleOpen}><AssessmentTwoToneIcon/></Button>
-                        <Button onClick={download}><FileDownloadTwoToneIcon/></Button>
-                    </div>
-                </Box>
+                <SearchForm handleOpen={handleOpen}/>
                 <Table
                     stickyHeader
                     className={css.Table}

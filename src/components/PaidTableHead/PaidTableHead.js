@@ -16,7 +16,7 @@ const PaidTableHead = (props) => {
                     <TableCell
                         key={colum.field}
                         padding={colum.disablePadding ? 'none' : 'normal'}
-                        sortDirection={orderBy === colum.field ? order : false}
+                        sortDirection={orderBy === colum.field && order ? order : 'asc'}
                     >
                         <TableSortLabel
                             active={orderBy === colum.field || orderBy === `-${colum.field}`}

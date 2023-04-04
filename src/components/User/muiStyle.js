@@ -7,6 +7,7 @@ export const style = {
     },
 
     Button: {
+        fontWeight: "bold",
         '&:hover': {
             backgroundColor: "red"
         }
