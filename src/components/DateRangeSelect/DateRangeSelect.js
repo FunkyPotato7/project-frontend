@@ -9,8 +9,8 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 
 import css from './DateRangeSelect.module.css';
 
-const DateRangeSelect = ({dateValue, setDateValue}) => {
-    const [query, setQuery] = useSearchParams();
+const DateRangeSelect = ({dateValue, setDateValue, defaultQuery}) => {
+    const [query, setQuery] = useSearchParams(defaultQuery);
 
     const [open, setOpen] = useState(false);
     const [range, setRange] = useState([
@@ -47,7 +47,7 @@ const DateRangeSelect = ({dateValue, setDateValue}) => {
     const handleInputChange = (event) => {
         let value = event.target.value;
 
-        if (event.keyCode === 8) {
+        if (event.keyCode === 8 && event.target.name === 'Created_At') {
             if (value.length === 3) {
                 value = '';
             }
@@ -69,52 +69,52 @@ const DateRangeSelect = ({dateValue, setDateValue}) => {
             }
         }
 
-        if (value.length === 2 && value.slice(0, 2) > '12') {
+        if (value?.length === 2 && value.slice(0, 2) > '12') {
             value = value.replace(value.slice(0, 2), '12');
-        } else if (value.length === 2 && value.slice(0, 2) < '01' ) {
+        } else if (value?.length === 2 && value.slice(0, 2) < '01' ) {
             value = value.replace(value.slice(0, 2), '01');
-        } else if (value.length > 2 && value.charAt(2) !== '/') {
+        } else if (value?.length > 2 && value.charAt(2) !== '/') {
                 value = value.replace(value.slice(0), '01');
         }
 
-        if (value.length === 5 && value.slice(3, 5) > '31' ) {
+        if (value?.length === 5 && value.slice(3, 5) > '31' ) {
             value = value.replace(value.slice(3, 5), '31');
-        } else if (value.length === 5 && value.slice(3, 5) < '01') {
+        } else if (value?.length === 5 && value.slice(3, 5) < '01') {
             value = value.replace(value.slice(3, 5), '01');
-        } else if (value.length > 5 && value.charAt(5) !== '/') {
+        } else if (value?.length > 5 && value.charAt(5) !== '/') {
             value = value.replace(value.slice(3), '01');
         }
 
-        if (value.length === 10 && value.slice(6, 10) > '2042') {
+        if (value?.length === 10 && value.slice(6, 10) > '2042') {
             value = value.replace(value.slice(6, 10), '2042');
-        } else if (value.length === 10 && value.slice(6, 10) < '1922') {
+        } else if (value?.length === 10 && value.slice(6, 10) < '1922') {
             value = value.replace(value.slice(6, 10), '1922');
-        }  else if (value.length > 10 && value.charAt(11) !== '-') {
+        }  else if (value?.length > 10 && value.charAt(11) !== '-') {
             value = value.replace(value.slice(6), '1922');
         }
 
 
-        if (value.length === 15 && value.slice(13, 15) > '12') {
+        if (value?.length === 15 && value.slice(13, 15) > '12') {
             value = value.replace(value.slice(13, 15), '12');
-        } else if (value.length === 15 && value.slice(13, 15) < '01') {
+        } else if (value?.length === 15 && value.slice(13, 15) < '01') {
             value = value.replace(value.slice(13, 15), '01');
-        } else if (value.length > 15 && value.charAt(15) !== '/') {
+        } else if (value?.length > 15 && value.charAt(15) !== '/') {
             value = value.replace(value.slice(13), '01');
         }
 
-        if (value.length === 18 && value.slice(16, 18) > '31') {
+        if (value?.length === 18 && value.slice(16, 18) > '31') {
             value = value.replace(value.slice(16, 18), '31');
-        } else if (value.length === 18 && value.slice(16, 18) < '01' ) {
+        } else if (value?.length === 18 && value.slice(16, 18) < '01' ) {
             value = value.replace(value.slice(16, 18), '01');
-        } else if (value.length > 18 && value.charAt(18) !== '/') {
+        } else if (value?.length > 18 && value.charAt(18) !== '/') {
             value = value.replace(value.slice(16), '01');
         }
 
-        if (value.length === 23 && value.slice(19, 30) > '2042') {
+        if (value?.length === 23 && value.slice(19, 30) > '2042') {
                 value = value.replace(value.slice(19), '2042');
-        } else if (value.length === 23 && value.slice(19, 30) < '1922') {
+        } else if (value?.length === 23 && value.slice(19, 30) < '1922') {
                 value = value.replace(value.slice(19), '1922');
-        } else if (value.length > 23) {
+        } else if (value?.length > 23) {
             value = value.replace(value.slice(19), '1922');
         }
 
@@ -139,7 +139,9 @@ const DateRangeSelect = ({dateValue, setDateValue}) => {
                 break;
         }
 
+    if (event.target.name === 'Created_At') {
         setDateValue(value);
+    }
 
         if (value.length === 23) {
             const [startDate, endDate] = value.split(' - ');
@@ -182,6 +184,7 @@ const DateRangeSelect = ({dateValue, setDateValue}) => {
             <div className={css.InputBox} onClick={handleInputClick}>
                 <input
                     className={css.Input}
+                    name="Created_At"
                     type="text"
                     placeholder={open ? "MM/DD/YY - MM/DD/YY" : ''}
                     value={dateValue}

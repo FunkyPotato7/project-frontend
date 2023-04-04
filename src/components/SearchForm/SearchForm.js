@@ -52,15 +52,14 @@ const SearchForm = ({handleOpen}) => {
             query.set(name, value);
         } else if (!value) {
             query.delete(name);
-            setQuery(query);
         }
     };
 
     const handleChange = async (e) => {
-        if (!e.target.name) {
+        if (e.target.name === 'Created_At') {
             return 0;
         }
-        console.log(e);
+
         clearTimeout(timeout);
 
         search(e.target.name, e.target.value);
@@ -198,6 +197,7 @@ const SearchForm = ({handleOpen}) => {
                 <DateRangeSelect
                     dateValue={dateValue}
                     setDateValue={setDateValue}
+                    defaultQuery={query}
                 />
                 <FormControlLabel
                     label="My"
