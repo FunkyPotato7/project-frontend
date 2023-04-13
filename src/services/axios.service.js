@@ -27,8 +27,6 @@ axiosService.interceptors.response.use((config) => {
     async (error) => {
         const refreshToken = authService.getRefreshToken();
 
-        console.log(error.response.data);
-
         if (error.response?.status === 401 && refreshToken && !isRefreshing && error.response?.data === "Token not valid" ) {
             isRefreshing = true
 

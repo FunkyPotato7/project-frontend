@@ -11,55 +11,55 @@ const initialState = {
     currentPage: 1,
     countOnPage: 1,
     isLoading: false,
-    error: false,
+    paidError: '',
 };
 
 const getAll = createAsyncThunk(
     "paidSlice/getAll",
-    async (query, {rejectedWithValue}) => {
+    async (query, {rejectWithValue}) => {
         try {
             const { data } = await paidService.getAll(query);
             return data
         } catch (e) {
-            return rejectedWithValue(e.response.data);
+            return rejectWithValue(e.response.data);
         }
     }
 );
 
 const getStatistic = createAsyncThunk(
     "paidSlice/getStatistic",
-    async (_, {rejectedWithValue}) => {
+    async (_, {rejectWithValue}) => {
         try {
             const { data } = await paidService.statistic();
             return data
         } catch (e) {
-            return rejectedWithValue(e.response.data);
+            return rejectWithValue(e.response.data);
         }
     }
 );
 
 const update = createAsyncThunk(
     "paidSlice/update",
-    async (updateData, {rejectedWithValue}) => {
+    async (updateData, {rejectWithValue}) => {
         try {
             const { id, info } = updateData
 
             const { data } = await paidService.update(id, info);
             return data
         } catch (e) {
-            return rejectedWithValue(e.response.data);
+            return rejectWithValue(e.response.data);
         }
     }
 );
 
 const getAllGroups = createAsyncThunk(
     "paidSlice/getAllGroups",
-    async (_, {rejectedWithValue}) => {
+    async (_, {rejectWithValue}) => {
         try {
             const { data } = await groupsService.getAll();
             return data;
         } catch (e) {
-            return rejectedWithValue(e.response.data);
+            return rejectWithValue(e.response.data);
         }
     }
 )
@@ -76,22 +76,22 @@ const paidSlice = createSlice({
                 state.currentPage = action.payload.page;
                 state.countOnPage = action.payload.count_on_page;
                 state.isLoading = false;
-                state.error = false;
+                state.paidError = '';
             })
             .addCase(getAll.pending, (state, action) => {
                 state.isLoading = true;
             })
             .addCase(getAll.rejected, (state, action) => {
-                state.error = true;
+                state.paidError = action.payload;
+                state.paids = [];
+                console.log(action);
             })
             .addCase(getStatistic.fulfilled, (state, action) => {
                 state.statistic = action.payload;
-                state.error = false;
             })
             .addCase(update.fulfilled, (state, action) => {
                 state.updatedPaid = action.payload;
                 state.isLoading = false;
-                state.error = false;
             })
             .addCase(getAllGroups.fulfilled, (state, action) => {
                 state.groups = action.payload.groups;

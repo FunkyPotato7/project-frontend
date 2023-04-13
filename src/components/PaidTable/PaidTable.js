@@ -17,7 +17,7 @@ import { PaidTableHead, PaidTableBody, SearchForm, Statistic } from '../../compo
 
 
 const PaidTable = ({handleSnackOpen}) => {
-    const { paids, statistic, totalCount, currentPage, countOnPage, isLoading } = useSelector(state => state.paidReducer);
+    const { paids, statistic, totalCount, currentPage, countOnPage, isLoading, paidError } = useSelector(state => state.paidReducer);
     const [query, setQuery] = useSearchParams({limit: '30', order: '_id'});
     const dispatch = useDispatch();
 
@@ -65,6 +65,7 @@ const PaidTable = ({handleSnackOpen}) => {
             {isLoading && <LinearProgress/>}
             <TableContainer className={css.Container}>
                 <SearchForm handleOpen={handleOpen}/>
+                {paidError && <div className={css.Error}>{paidError}</div>}
                 <Table
                     stickyHeader
                     className={css.Table}
