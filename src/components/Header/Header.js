@@ -21,22 +21,23 @@ const Header = () => {
 
     const toAdmin = () => {
         navigate('/admin');
-    }
+    };
 
     const back = () => {
-        navigate('/paid?page=1');
-    }
+        navigate('/paid?page=1&order=num');
+    };
 
     const logout = async () => {
         await authService.logout();
         await authService.deleteTokens();
         navigate('/login');
-    }
+    };
 
     return(
         <div className={css.Header}>
-            <Typography variant="h5">{user?.profile.name}</Typography>
+            <Typography variant="h5">Logo</Typography>
             <div className={css.Buttons}>
+                <Typography variant="h6">{user?.profile.name}</Typography>
                 {user?.is_superuser === 1 &&
                     <Button
                         sx={muiStyle.Button}

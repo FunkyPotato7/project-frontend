@@ -6,8 +6,10 @@ import { authService } from "./auth.service";
 
 const history = createBrowserHistory();
 
-
 const axiosService = axios.create({baseURL});
+
+let isRefreshing = false;
+let expired = false;
 
 axiosService.interceptors.request.use((config) => {
     const accessToken = authService.getAccessToken();
@@ -19,16 +21,15 @@ axiosService.interceptors.request.use((config) => {
     return config;
 });
 
-let isRefreshing = false;
-
 axiosService.interceptors.response.use((config) => {
         return config;
     },
     async (error) => {
-        // const accessToken = authService.getAccessToken();
         const refreshToken = authService.getRefreshToken();
 
-        if (error.response?.status === 401 && refreshToken && !isRefreshing) {
+        console.log(error.response.data);
+
+        if (error.response?.status === 401 && refreshToken && !isRefreshing && error.response?.data === "Token not valid" ) {
             isRefreshing = true
 
             try {
@@ -43,14 +44,13 @@ axiosService.interceptors.response.use((config) => {
 
         }
 
-        // if (error.response?.status === 401) {
-        //     history.push('/login');
-        //     authService.deleteTokens();
-        //     return axiosService(error.config);
-        // }
+        if (error.response?.status === 401 && !expired && error.response?.data === "Action token not valid") {
+            expired = true;
+            return axiosService(error.config);
+        }
 
         if (error.response?.status === 403) {
-            history.push('/bannedPage');
+            history.replace('/bannedPage');
             authService.deleteToken('refreshToken');
             return axiosService(error.config);
         }

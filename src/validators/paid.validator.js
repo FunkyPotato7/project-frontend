@@ -1,9 +1,11 @@
 import Joi from "joi";
 
+import { regexp } from "../configs";
+
 const paidValidator = Joi.object({
     name: Joi.string().max(20).allow('', null).optional(),
     surname: Joi.string().max(20).allow('', null).optional(),
-    email: Joi.string().regex(/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/).allow('', null).optional(),
+    email: Joi.string().regex(regexp.EMAIL).allow('', null).optional(),
     phone: Joi.string().allow('', null).optional(),
     age: Joi.number().allow('', null).optional(),
     course: Joi.string().allow('', null).optional(),

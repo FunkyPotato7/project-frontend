@@ -1,4 +1,4 @@
 export * from './urls';
-export * from './colums';
+export * from './colums.enum';
 export * from './regexp';
-export * from './select-items';
+export * from './selectItems.enum';

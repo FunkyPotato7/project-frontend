@@ -23,7 +23,7 @@ const PaidTableBody = (props) => {
     return (
         <TableBody>
                 <TableRow hover onClick={() => collapseHandler()}>
-                    <TableCell>{paid.id}</TableCell>
+                    <TableCell>{paid.num}</TableCell>
                     <TableCell>{paid.name ? paid.name : 'null'}</TableCell>
                     <TableCell>{paid.surname ? paid.surname : 'null'}</TableCell>
                     <TableCell>{paid.age ? paid.age : 'null'}</TableCell>

@@ -9,9 +9,8 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 
 import css from './DateRangeSelect.module.css';
 
-const DateRangeSelect = ({dateValue, setDateValue, defaultQuery}) => {
-    const [query, setQuery] = useSearchParams(defaultQuery);
-
+const DateRangeSelect = ({dateValue, setDateValue}) => {
+    const [query, setQuery] = useSearchParams();
     const [open, setOpen] = useState(false);
     const [range, setRange] = useState([
         {
@@ -97,9 +96,9 @@ const DateRangeSelect = ({dateValue, setDateValue, defaultQuery}) => {
         if (value?.length === 15 && value.slice(13, 15) > '12') {
             value = value.replace(value.slice(13, 15), '12');
         } else if (value?.length === 15 && value.slice(13, 15) < '01') {
-            value = value.replace(value.slice(13, 15), '01');
+            value.replace(value.slice(13, 15), '01');
         } else if (value?.length > 15 && value.charAt(15) !== '/') {
-            value = value.replace(value.slice(13), '01');
+            value.replace(value.slice(13), '01');
         }
 
         if (value?.length === 18 && value.slice(16, 18) > '31') {
@@ -119,7 +118,7 @@ const DateRangeSelect = ({dateValue, setDateValue, defaultQuery}) => {
         }
 
 
-        switch(value.length) {
+        switch(value?.length) {
             case 2:
                 value += '/';
                 break;
@@ -139,11 +138,11 @@ const DateRangeSelect = ({dateValue, setDateValue, defaultQuery}) => {
                 break;
         }
 
-    if (event.target.name === 'Created_At') {
-        setDateValue(value);
-    }
+        if (event.target.name === 'Created_At') {
+            setDateValue(value);
+        }
 
-        if (value.length === 23) {
+        if (value?.length === 23 && event.target.name === 'Created_At' && event.keyCode !== 8) {
             const [startDate, endDate] = value.split(' - ');
             const newRange = [
                 {
@@ -157,18 +156,11 @@ const DateRangeSelect = ({dateValue, setDateValue, defaultQuery}) => {
                 setDateValue('Invalid Date')
             } else {
                 setRange(newRange);
-                handleDateChange(newRange);
             }
 
         }
 
-        if (value.length === 0) {
-            query.delete('start_date');
-            query.delete('end_date');
-            setQuery(query);
-        }
     };
-
 
     const handleDateChange = (item) => {
         query.set('start_date', item[0].startDate);
@@ -209,6 +201,7 @@ const DateRangeSelect = ({dateValue, setDateValue, defaultQuery}) => {
         </div>
     );
 };
+
 
 export {
     DateRangeSelect

@@ -18,13 +18,18 @@
 .Form {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     align-items: flex-end;
-
-    width: 250px;
-    height: 180px;
 }
 
-.TextField {
+.Error {
+    color: #d32f2f;
+    margin: 0;
     width: 250px;
 }
+
+.ToLoginButton:hover {
+    cursor: pointer;
+    color: #1976d2;
+}
+
+

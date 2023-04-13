@@ -75,7 +75,10 @@ const UserList = ({handleSnackOpen}) => {
                             className={css.TextField}
                             label="Email"
                             error={errors.email && true}
-                            helperText={errors.email && errors.email.message}
+                            helperText={errors.email && errors.email?.message.includes('pattern') ?
+                                'Wrong email pattern' :
+                                errors.email?.message
+                            }
                             {...register('email')}
                         />
                         <Box className={css.Buttons}>

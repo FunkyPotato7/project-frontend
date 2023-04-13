@@ -1,8 +1,10 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { joiResolver } from "@hookform/resolvers/joi";
-import { Button, TextField } from "@mui/material";
+import { Button, IconButton, InputAdornment, TextField } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 import css from './LoginForm.module.css';
 import { authService } from "../../services";
@@ -17,6 +19,9 @@ const LoginForm = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
+    const [type, setType] = useState(false);
+
+    const handleClickShowPassword = () => setType(() => !type);
 
     const submit = async (user) => {
         try {
@@ -25,7 +30,7 @@ const LoginForm = () => {
                 dispatch(userActions.getUser(data.user));
             });
 
-            navigate('/paid?page=1');
+            navigate('/paid?page=1&order=num');
 
         } catch (e) {
             setError('email', { message: 'Wrong email or password' });
@@ -33,7 +38,6 @@ const LoginForm = () => {
         }
 
     };
-
 
     return(
         <div className={css.LoginForm}>
@@ -44,17 +48,32 @@ const LoginForm = () => {
                 type="email"
                 autoFocus={true}
                 error={errors.email && true}
-                helperText={errors.email && errors.email.message}
+                helperText={errors.email && errors.email.message.includes('pattern') ?
+                    'Wrong email pattern' :
+                    errors.email?.message
+                }
                 {...register('email')}
             />
-            <TextField
-                label="Password"
-                variant="outlined"
-                type="password"
-                error={errors.password && true}
-                helperText={errors.password && errors.password.message}
-                {...register('password')}
-            />
+                <TextField
+                    label="Password"
+                    variant="outlined"
+                    type={type ? 'text' : 'password'}
+                    error={errors.password && true}
+                    helperText={errors.password && errors.password.message}
+                    {...register('password')}
+                    InputProps={{
+                        endAdornment:
+                            <InputAdornment position="end">
+                                <IconButton
+                                    aria-label="toggle password visibility"
+                                    onClick={handleClickShowPassword}
+                                >
+                                    {type ? <VisibilityOff /> : <Visibility />}
+                                </IconButton>
+                            </InputAdornment>
+                    }}
+                />
+
             <Button sx={{fontWeight: "bold"}} variant='contained' onClick={handleSubmit(submit)}>Login</Button>
         </div>
     );

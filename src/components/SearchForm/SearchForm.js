@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import FileDownload from "js-file-download";
+import format from "date-fns/format";
 import {
     Button,
     Checkbox,
@@ -12,21 +13,20 @@ import {
     Select,
     TextField
 } from "@mui/material";
+import ClearAllIcon from '@mui/icons-material/ClearAll';
 import AssessmentTwoToneIcon from "@mui/icons-material/AssessmentTwoTone";
 import FileDownloadTwoToneIcon from "@mui/icons-material/FileDownloadTwoTone";
-import ClearAllIcon from '@mui/icons-material/ClearAll';
 
 import css from "./SearchForm.module.css";
 import { courses, types, statuses, formats } from "../../configs";
 import { paidActions } from "../../store";
 import { paidService } from "../../services";
 import { DateRangeSelect } from "../DateRangeSelect/DateRangeSelect";
-import format from "date-fns/format";
 
 
 const SearchForm = ({handleOpen}) => {
     const { groups } = useSelector(store => store.paidReducer);
-    const [query, setQuery] = useSearchParams();
+    const [query, setQuery] = useSearchParams({page: '1', order: 'num'});
     const dispatch = useDispatch();
 
     const [dateValue, setDateValue] = useState(
@@ -39,7 +39,7 @@ const SearchForm = ({handleOpen}) => {
     useEffect(() => {
         dispatch(paidActions.getAllGroups());
     },
-        [dispatch])
+        [dispatch]);
 
     let timeout = null;
 
@@ -48,6 +48,8 @@ const SearchForm = ({handleOpen}) => {
     }
 
     const search = (name, value) => {
+        query.set('page', '1');
+
         if (value) {
             query.set(name, value);
         } else if (!value) {
@@ -55,26 +57,42 @@ const SearchForm = ({handleOpen}) => {
         }
     };
 
-    const handleChange = async (e) => {
-        if (e.target.name === 'Created_At') {
-            return 0;
-        }
+    const handleSearchChange = async (e) => {
+        let value = e.target.value;
+        let name = e.target.name;
 
         clearTimeout(timeout);
 
-        search(e.target.name, e.target.value);
+        if (name === 'Created_At') {
+            if (value?.length === 23) {
+                const [startDate, endDate] = value.split(' - ');
 
-        if (e.target.name === 'name' || e.target.name === 'surname' || e.target.name === 'age' ||
-            e.target.name === 'email' || e.target.name === 'phone' || e.name === 'createdAt' ) {
+                search('start_date', startDate);
+                search('end_date', endDate);
 
-            timeout = setTimeout(() => {
-                query.set('page', '1');
                 setQuery(query);
-            }, 1000);
+            } else if (value?.length < 23) {
+                search('start_date', '');
+                search('end_date', '');
+
+                setQuery(query);
+            }
 
         } else {
-            query.set('page', '1');
-            setQuery(query);
+
+            search(name, value);
+
+            if (name === 'name' || name === 'surname' || name === 'age' ||
+                name === 'email' || name === 'phone' ) {
+
+                timeout = setTimeout(() => {
+                    setQuery(query);
+                }, 1000);
+
+            } else {
+                setQuery(query);
+            }
+
         }
     };
 
@@ -89,7 +107,7 @@ const SearchForm = ({handleOpen}) => {
     };
 
     return(
-        <form className={css.Form} onChange={handleChange}>
+        <form className={css.Form} onChange={handleSearchChange}>
             <div className={css.Fields}>
                 <TextField
                     name="name"
@@ -139,7 +157,7 @@ const SearchForm = ({handleOpen}) => {
                         name='course'
                         size="small"
                         value={ query.get('course') ? query.get('course') : '' }
-                        onChange={handleChange}
+                        onChange={handleSearchChange}
                     >
                         <MenuItem value={''}> </MenuItem>
                         {courses.map(course => <MenuItem key={course} value={ course }>{course}</MenuItem>)}
@@ -151,7 +169,7 @@ const SearchForm = ({handleOpen}) => {
                         name='course_format'
                         size="small"
                         value={ query.get('course_format') ? query.get('course_format') : '' }
-                        onChange={handleChange}
+                        onChange={handleSearchChange}
                     >
                         <MenuItem value={''}> </MenuItem>
                         {formats.map(format => <MenuItem key={format} value={ format }>{format}</MenuItem>)}
@@ -164,7 +182,7 @@ const SearchForm = ({handleOpen}) => {
                         defaultValue=''
                         size="small"
                         value={ query.get('course_type') ? query.get('course_type') : '' }
-                        onChange={handleChange}
+                        onChange={handleSearchChange}
                     >
                         <MenuItem value={''}> </MenuItem>
                         {types.map(type => <MenuItem key={type} value={ type }>{type}</MenuItem>)}
@@ -176,7 +194,7 @@ const SearchForm = ({handleOpen}) => {
                         name='status'
                         size="small"
                         value={ query.get('status') ? query.get('status') : '' }
-                        onChange={handleChange}
+                        onChange={handleSearchChange}
                     >
                         <MenuItem value={''}> </MenuItem>
                         {statuses.map(status => <MenuItem key={status} value={ status }>{status}</MenuItem>)}
@@ -188,7 +206,7 @@ const SearchForm = ({handleOpen}) => {
                         name='group'
                         size="small"
                         value={ query.get('group') ? query.get('group') : '' }
-                        onChange={handleChange}
+                        onChange={handleSearchChange}
                     >
                         <MenuItem value={''}> </MenuItem>
                         {groups.map(({_id, name}) => <MenuItem key={_id} value={ name }>{name}</MenuItem>)}
@@ -197,7 +215,7 @@ const SearchForm = ({handleOpen}) => {
                 <DateRangeSelect
                     dateValue={dateValue}
                     setDateValue={setDateValue}
-                    defaultQuery={query}
+                    defQuery={query}
                 />
                 <FormControlLabel
                     label="My"

@@ -32,7 +32,7 @@ const CollapsedMenu = (props) => {
     const { user } = useSelector(store => store.userReducer);
     const { groups } = useSelector(store => store.paidReducer);
     const { register: createGroupForm, handleSubmit: createHandleSubmit, setValue: setCreateValue } = useForm();
-    const { register, handleSubmit, setValue, formState: { errors } } = useForm({
+    const { register, handleSubmit, setValue, formState: { errors }, setError } = useForm({
         mode: "onSubmit",
         resolver: joiResolver(paidValidator)
     });
@@ -116,12 +116,12 @@ const CollapsedMenu = (props) => {
                                         label="Comment"
                                         error={errors.comment && true}
                                         helperText={errors.comment && errors.name.message}
-                                        disabled={paid.manager?._id && user.profile._id !== paid.manager?._id}
+                                        disabled={paid.manager?._id && user.profile?._id !== paid.manager?._id}
                                         {...register('comment')}
                                     />
                                 </form>
                             </div>
-                            <Button sx={{borderRadius: 50, margin: 1}} disabled={!!(user.profile?._id !== paid.manager?._id && paid.manager?._id)} onClick={handleOpenUpdate}><ModeEditIcon/></Button>
+                            <Button sx={{borderRadius: 50, margin: 1}} disabled={!!(user?.profile?._id !== paid.manager?._id && paid.manager?._id)} onClick={handleOpenUpdate}><ModeEditIcon/></Button>
                             <Modal
                                 className={css.Modal}
                                 open={openUpdate}
@@ -181,7 +181,10 @@ const CollapsedMenu = (props) => {
                                                     sx={{width: 250, marginBottom: 2}}
                                                     label="Email"
                                                     error={errors.email && true}
-                                                    helperText={errors.email && errors.email.message}
+                                                    helperText={errors.email && errors.email?.message.includes('pattern') ?
+                                                        'Wrong email pattern' :
+                                                        errors.email?.message
+                                                    }
                                                     defaultValue={paid.email}
                                                     {...register('email')}
                                                 />

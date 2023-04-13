@@ -18,11 +18,11 @@ import { PaidTableHead, PaidTableBody, SearchForm, Statistic } from '../../compo
 
 const PaidTable = ({handleSnackOpen}) => {
     const { paids, statistic, totalCount, currentPage, countOnPage, isLoading } = useSelector(state => state.paidReducer);
-    const [query, setQuery] = useSearchParams({limit: '30'});
+    const [query, setQuery] = useSearchParams({limit: '30', order: '_id'});
     const dispatch = useDispatch();
 
-    const [order, setOrder] = useState('');
-    const [orderBy, setOrderBy] = useState(query.get('order') || 'id');
+    const [order, setOrder] = useState(query.get('order')?.includes('-') ? 'desc' : 'asc');
+    const [orderBy, setOrderBy] = useState(query.get('order') || '_id');
     const [open, setOpen] = useState(false);
 
     useEffect(() => {
@@ -42,16 +42,17 @@ const PaidTable = ({handleSnackOpen}) => {
     const handleRequestSort = (event, property) => {
         setOrderBy(property);
 
-        if (order === '') {
-            setOrder('desc');
-            query.set('order', `-${property}`);
-        } else if (order === 'desc') {
+        if (property === query.get('order') || `-${property}` === query.get('order') ) {
+            if (order === 'asc') {
+                setOrder('desc');
+                query.set('order', `-${property}`);
+            } else if (order === 'desc') {
+                setOrder('asc');
+                query.set('order', `${property}`);
+            }
+        } else {
             setOrder('asc');
             query.set('order', `${property}`);
-        } else {
-            setOrder('');
-            setOrderBy(null);
-            query.delete('order');
         }
 
         query.set('page', '1');
@@ -76,7 +77,7 @@ const PaidTable = ({handleSnackOpen}) => {
                     />
                     {paids.map(paid => (
                         <PaidTableBody
-                            key={paid.id}
+                            key={paid._id}
                             value={paid}
                             handleSnackOpen={handleSnackOpen}
                         />
