@@ -9,7 +9,7 @@ import { authService } from "../../services";
 import { userActions } from "../../store";
 
 
-const Header = () => { // created_at validate bug ***
+const Header = () => {
     const { user } = useSelector(store => store.userReducer);
     const location = useLocation();
     const navigate = useNavigate();
