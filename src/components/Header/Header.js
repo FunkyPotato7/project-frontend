@@ -9,7 +9,7 @@ import { authService } from "../../services";
 import { userActions } from "../../store";
 
 
-const Header = () => {
+const Header = () => { // created_at validate bug ***
     const { user } = useSelector(store => store.userReducer);
     const location = useLocation();
     const navigate = useNavigate();
@@ -24,7 +24,7 @@ const Header = () => {
     };
 
     const back = () => {
-        navigate('/paid?page=1&order=num');
+        navigate('/paid?page=1&order=-num');
     };
 
     const logout = async () => {

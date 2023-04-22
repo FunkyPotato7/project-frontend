@@ -24,9 +24,8 @@ const DateRangeSelect = ({dateValue, setDateValue}) => {
 
     useEffect(() => {
         document.addEventListener("keydown", hideOnEscape, true);
-        document.addEventListener("keydown", handleInputChange, true);
         document.addEventListener("click", hideOnClickOutside, true);
-    }, []);
+    });
 
     const hideOnEscape = (e) => {
         if (e.key === "Escape") {
@@ -46,96 +45,76 @@ const DateRangeSelect = ({dateValue, setDateValue}) => {
     const handleInputChange = (event) => {
         let value = event.target.value;
 
-        if (event.keyCode === 8 && event.target.name === 'Created_At') {
-            if (value.length === 3) {
-                value = '';
+        if (event.nativeEvent.inputType !== 'deleteContentBackward') {
+            if (value?.length === 2 && value.slice(0, 2) > '12') {
+                value = value.replace(value.slice(0, 2), '12');
+            } else if (value?.length === 2 && value.slice(0, 2) < '01' ) {
+                value = value.replace(value.slice(0, 2), '01');
+            } else if (value?.length > 2 && value.charAt(2) !== '/') {
+                value = value.replace(value.slice(0, 2), '01');
             }
 
-            if (value.length === 6) {
-                value = value.slice(0, 3);
+            if (value?.length === 5 && parseInt(value.slice(3, 5)) > 31) {
+                value = value.replace(value.slice(3, 5), '31');
+            } else if (value?.length === 5 && value.slice(3, 5) < '01') {
+                value = value.replace(value.slice(3, 5), '01');
+            } else if (value?.length > 5 && value.charAt(5) !== '/') {
+                value = value.replace(value.slice(3, 5), '01');
             }
 
-            if (value.length === 13) {
-                value = value.slice(0, 6);
+            if (value?.length === 10 && value.slice(6, 10) > '2042') {
+                value = value.replace(value.slice(6, 10), '2042');
+            } else if (value?.length === 10 && value.slice(6, 10) < '1922') {
+                value = value.replace(value.slice(6, 10), '1922');
+            }  else if (value?.length > 10 && value.charAt(11) !== '-') {
+                value = value.replace(value.slice(6, 10), '1922');
             }
 
-            if (value.length === 16) {
-                value = value.slice(0, 14);
+            if (value?.length === 15 && parseInt(value.slice(13, 15)) > 12) {
+                value = value.replace(value.slice(13, 15), '01');
+            } else if (value?.length === 15 && parseInt(value.slice(13, 15)) < '01') {
+                value = value.replace(value.slice(13, 15), '01');
+            } else if (value?.length > 15 && value.charAt(15) !== '/') {
+                value = value.replace(value.slice(13, 15), '01');
             }
 
-            if (value.length === 19) {
-                value = value.slice(0, 16);
+            if (value?.length === 18 && value.slice(16, 18) > '31') {
+                value = value.replace(value.slice(16, 18), '31');
+            } else if (value?.length === 18 && value.slice(16, 18) < '01' ) {
+                value = value.replace(value.slice(16, 18), '01');
+            } else if (value?.length > 18 && value.charAt(18) !== '/') {
+                value = value.replace(value.slice(16, 18), '01');
             }
-        }
 
-        if (value?.length === 2 && value.slice(0, 2) > '12') {
-            value = value.replace(value.slice(0, 2), '12');
-        } else if (value?.length === 2 && value.slice(0, 2) < '01' ) {
-            value = value.replace(value.slice(0, 2), '01');
-        } else if (value?.length > 2 && value.charAt(2) !== '/') {
-                value = value.replace(value.slice(0), '01');
-        }
-
-        if (value?.length === 5 && value.slice(3, 5) > '31' ) {
-            value = value.replace(value.slice(3, 5), '31');
-        } else if (value?.length === 5 && value.slice(3, 5) < '01') {
-            value = value.replace(value.slice(3, 5), '01');
-        } else if (value?.length > 5 && value.charAt(5) !== '/') {
-            value = value.replace(value.slice(3), '01');
-        }
-
-        if (value?.length === 10 && value.slice(6, 10) > '2042') {
-            value = value.replace(value.slice(6, 10), '2042');
-        } else if (value?.length === 10 && value.slice(6, 10) < '1922') {
-            value = value.replace(value.slice(6, 10), '1922');
-        }  else if (value?.length > 10 && value.charAt(11) !== '-') {
-            value = value.replace(value.slice(6), '1922');
-        }
-
-
-        if (value?.length === 15 && value.slice(13, 15) > '12') {
-            value = value.replace(value.slice(13, 15), '12');
-        } else if (value?.length === 15 && value.slice(13, 15) < '01') {
-            value.replace(value.slice(13, 15), '01');
-        } else if (value?.length > 15 && value.charAt(15) !== '/') {
-            value.replace(value.slice(13), '01');
-        }
-
-        if (value?.length === 18 && value.slice(16, 18) > '31') {
-            value = value.replace(value.slice(16, 18), '31');
-        } else if (value?.length === 18 && value.slice(16, 18) < '01' ) {
-            value = value.replace(value.slice(16, 18), '01');
-        } else if (value?.length > 18 && value.charAt(18) !== '/') {
-            value = value.replace(value.slice(16), '01');
-        }
-
-        if (value?.length === 23 && value.slice(19, 30) > '2042') {
+            if (value?.length === 23 && value.slice(19, 30) > '2042') {
                 value = value.replace(value.slice(19), '2042');
-        } else if (value?.length === 23 && value.slice(19, 30) < '1922') {
+            } else if (value?.length === 23 && value.slice(19, 30) < '1922') {
                 value = value.replace(value.slice(19), '1922');
-        } else if (value?.length > 23) {
-            value = value.replace(value.slice(19), '1922');
-        }
+            } else if (value?.length > 23) {
+                value = value.replace(value.slice(19, 30), '1922');
+            }
 
+            console.log(value);
 
-        switch(value?.length) {
-            case 2:
-                value += '/';
-                break;
-            case 5:
-                value += '/';
-                break;
-            case 10:
-                value += ' - ';
-                break;
-            case 15:
-                value += '/';
-                break;
-            case 18:
-                value += '/';
-                break;
-            default:
-                break;
+            switch(value?.length) {
+                case 2:
+                    value += '/';
+                    break;
+                case 5:
+                    value += '/';
+                    break;
+                case 10:
+                    value += ' - ';
+                    break;
+                case 15:
+                    value += '/';
+                    break;
+                case 18:
+                    value += '/';
+                    break;
+                default:
+                    break;
+            }
         }
 
         if (event.target.name === 'Created_At') {
@@ -153,14 +132,14 @@ const DateRangeSelect = ({dateValue, setDateValue}) => {
             ];
 
             if (newRange[0].startDate.toString() === 'Invalid Date' || newRange[0].endDate.toString() === 'Invalid Date') {
-                setDateValue('Invalid Date')
+                setDateValue('01/01/1922 - 01/01/1922');
             } else {
-                setRange(newRange);
+                handleDateChange(newRange);
             }
 
         }
 
-    };
+    }
 
     const handleDateChange = (item) => {
         query.set('start_date', item[0].startDate);
@@ -170,6 +149,7 @@ const DateRangeSelect = ({dateValue, setDateValue}) => {
         setQuery(query);
         setDateValue(`${format(new Date(query.get('start_date')), 'MM/dd/yyyy')} - ${format(new Date(query.get('end_date')), 'MM/dd/yyyy')}`);
     };
+
 
     return(
         <div className={css.CalendarWrap}>

@@ -18,11 +18,11 @@ import { PaidTableHead, PaidTableBody, SearchForm, Statistic } from '../../compo
 
 const PaidTable = ({handleSnackOpen}) => {
     const { paids, statistic, totalCount, currentPage, countOnPage, isLoading, paidError } = useSelector(state => state.paidReducer);
-    const [query, setQuery] = useSearchParams({limit: '30', order: '_id'});
+    const [query, setQuery] = useSearchParams({limit: '30', order: '-num'});
     const dispatch = useDispatch();
 
     const [order, setOrder] = useState(query.get('order')?.includes('-') ? 'desc' : 'asc');
-    const [orderBy, setOrderBy] = useState(query.get('order') || '_id');
+    const [orderBy, setOrderBy] = useState(query.get('order') || 'num');
     const [open, setOpen] = useState(false);
 
     useEffect(() => {
@@ -51,8 +51,8 @@ const PaidTable = ({handleSnackOpen}) => {
                 query.set('order', `${property}`);
             }
         } else {
-            setOrder('asc');
-            query.set('order', `${property}`);
+            setOrder('desc');
+            query.set('order', `-${property}`);
         }
 
         query.set('page', '1');

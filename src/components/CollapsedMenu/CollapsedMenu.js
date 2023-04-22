@@ -32,7 +32,7 @@ const CollapsedMenu = (props) => {
     const { user } = useSelector(store => store.userReducer);
     const { groups } = useSelector(store => store.paidReducer);
     const { register: createGroupForm, handleSubmit: createHandleSubmit, setValue: setCreateValue } = useForm();
-    const { register, handleSubmit, setValue, formState: { errors }, setError } = useForm({
+    const { register, handleSubmit, setValue, formState: { errors } } = useForm({
         mode: "onSubmit",
         resolver: joiResolver(paidValidator)
     });

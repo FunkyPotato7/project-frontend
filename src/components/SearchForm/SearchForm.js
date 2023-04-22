@@ -26,7 +26,7 @@ import { DateRangeSelect } from "../DateRangeSelect/DateRangeSelect";
 
 const SearchForm = ({handleOpen}) => {
     const { groups } = useSelector(store => store.paidReducer);
-    const [query, setQuery] = useSearchParams({page: '1', order: 'num'});
+    const [query, setQuery] = useSearchParams({page: '1', order: '-num'});
     const dispatch = useDispatch();
 
     const [dateValue, setDateValue] = useState(

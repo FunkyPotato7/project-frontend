@@ -30,7 +30,7 @@ const LoginForm = () => {
                 dispatch(userActions.getUser(data.user));
             });
 
-            navigate('/paid?page=1&order=num');
+            navigate('/paid?page=1&order=-num');
 
         } catch (e) {
             setError('email', { message: 'Wrong email or password' });

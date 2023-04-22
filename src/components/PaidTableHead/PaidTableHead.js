@@ -1,10 +1,8 @@
 import { TableCell, TableHead, TableRow } from "@mui/material";
 import TableSortLabel from "@mui/material/TableSortLabel";
-import {useSearchParams} from "react-router-dom";
 
 const PaidTableHead = (props) => {
     const {colums, order, orderBy, onRequestSort} = props;
-    const [query] = useSearchParams();
 
     const SortHandler = (property) => (event) => {
         onRequestSort(event, property);
@@ -22,7 +20,7 @@ const PaidTableHead = (props) => {
                         <TableSortLabel
                             key={colum.field}
                             active={orderBy === '№' ? true : orderBy === colum.field || orderBy === `-${colum.field}`}
-                            direction={query.get('order') === orderBy ? 'asc' : 'desc'}
+                            direction={order}
                             onClick={SortHandler(colum.field)}
                         >
                             {colum.headerName}

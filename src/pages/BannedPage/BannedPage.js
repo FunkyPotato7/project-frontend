@@ -7,10 +7,6 @@ import css from './BannedPage.module.css';
 const BannedPage = () => {
     const navigate = useNavigate();
 
-    const back = () => {
-        navigate('/login');
-    }
-
     return(
         <div className={css.Page}>
             <div className={css.Content}>
@@ -18,7 +14,7 @@ const BannedPage = () => {
                 <h3>You are banned</h3>
                 <div className={css.Text}>
                     <p align="center">Sorry, unless you`ve got a block, that content is unavailable until admin unbans you</p>
-                    <Button sx={{fontWeight: "bold"}} variant="contained" onClick={back}>Go back</Button>
+                    <Button sx={{fontWeight: "bold"}} variant="contained" onClick={() => navigate('/login')}>Go back</Button>
                 </div>
             </div>
         </div>

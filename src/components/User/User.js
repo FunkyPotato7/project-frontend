@@ -47,9 +47,9 @@ const User = ({userData, actionToken, handleSnackOpen}) => {
                 <h3>Statistic:</h3>
                 {orders.status_count.map(status => <h4 key={status.status}>{status.status} - {status.count}</h4>)}
             </div>
-            <div>
+            <div className={css.Btns}>
                 {!token ? <Button sx={style.RoundButton} onClick={Recreate} ><CreateIcon/></Button> : <Button sx={style.RoundButton} onClick={copy}><ContentCopyIcon/></Button>}
-                <Button sx={style.Button} variant="contained" startIcon={user.is_active ? <DoDisturbOnTwoToneIcon/> : <DoDisturbOffTwoToneIcon/>} onClick={block}>{user.is_active ? 'BAN' : 'UNBAN'}</Button>
+                {user.last_login && <Button sx={style.Button} variant="contained" startIcon={user.is_active ? <DoDisturbOnTwoToneIcon/> : <DoDisturbOffTwoToneIcon/>} onClick={block}>{user.is_active ? 'BAN' : 'UNBAN'}</Button>}
             </div>
         </div>
     );
