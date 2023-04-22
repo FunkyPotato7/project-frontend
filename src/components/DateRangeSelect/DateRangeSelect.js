@@ -54,7 +54,7 @@ const DateRangeSelect = ({dateValue, setDateValue}) => {
                 value = value.replace(value.slice(0, 2), '01');
             }
 
-            if (value?.length === 5 && parseInt(value.slice(3, 5)) > 31) {
+            if (value?.length === 5 && value.slice(3, 5) > '31') {
                 value = value.replace(value.slice(3, 5), '31');
             } else if (value?.length === 5 && value.slice(3, 5) < '01') {
                 value = value.replace(value.slice(3, 5), '01');
@@ -70,9 +70,9 @@ const DateRangeSelect = ({dateValue, setDateValue}) => {
                 value = value.replace(value.slice(6, 10), '1922');
             }
 
-            if (value?.length === 15 && parseInt(value.slice(13, 15)) > 12) {
+            if (value?.length === 15 && value.slice(13, 15) > '12') {
                 value = value.replace(value.slice(13, 15), '01');
-            } else if (value?.length === 15 && parseInt(value.slice(13, 15)) < '01') {
+            } else if (value?.length === 15 && value.slice(13, 15) < '01') {
                 value = value.replace(value.slice(13, 15), '01');
             } else if (value?.length > 15 && value.charAt(15) !== '/') {
                 value = value.replace(value.slice(13, 15), '01');
@@ -93,8 +93,6 @@ const DateRangeSelect = ({dateValue, setDateValue}) => {
             } else if (value?.length > 23) {
                 value = value.replace(value.slice(19, 30), '1922');
             }
-
-            console.log(value);
 
             switch(value?.length) {
                 case 2:
