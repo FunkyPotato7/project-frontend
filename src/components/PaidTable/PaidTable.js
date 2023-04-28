@@ -62,7 +62,7 @@ const PaidTable = ({handleSnackOpen}) => {
 
     return(
         <Box className={css.MainBox}>
-            {isLoading && <LinearProgress/>}
+            {isLoading && <LinearProgress sx={{position: "fixed", width: "100%"}}/>}
             <TableContainer className={css.Container}>
                 <SearchForm handleOpen={handleOpen}/>
                 {paidError && <div className={css.Error}>{paidError}</div>}

@@ -1,14 +1,18 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 
-import {ActivatePage, AdminPage, BannedPage, LoginPage, NotFoundPage, PaidPage} from "./pages";
+import { ActivatePage, AdminPage, BannedPage, LoginPage, NotFoundPage, PaidPage } from "./pages";
 import { MainLayout, UnauthorizedLayout } from "./layouts";
-import { RequireAuth } from "./hoc";
+import { AutoRedirect, RequireAuth } from "./hoc";
 
 
 function App() {
     return (
       <Routes>
-          <Route path={'/'} element={<UnauthorizedLayout/>}>
+          <Route path={'/'} element={
+              <AutoRedirect>
+                <UnauthorizedLayout/>
+              </AutoRedirect>
+          }>
               <Route index element={<Navigate to={'/login'}/>}/>
               <Route path={'/login'} element={<LoginPage/>}/>
               <Route path={'/activate/:id'} element={<ActivatePage/>}/>
