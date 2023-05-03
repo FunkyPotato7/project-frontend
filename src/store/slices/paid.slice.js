@@ -84,7 +84,6 @@ const paidSlice = createSlice({
             .addCase(getAll.rejected, (state, action) => {
                 state.paidError = action.payload;
                 state.paids = [];
-                console.log(action);
             })
             .addCase(getStatistic.fulfilled, (state, action) => {
                 state.statistic = action.payload;

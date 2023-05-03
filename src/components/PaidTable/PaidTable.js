@@ -35,7 +35,6 @@ const PaidTable = ({handleSnackOpen}) => {
 
     const handleChangePage = (event, newPage) => {
         query.set('page', `${newPage + 1}`);
-        query.delete('limit');
         setQuery(query);
     };
 
@@ -56,7 +55,6 @@ const PaidTable = ({handleSnackOpen}) => {
         }
 
         query.set('page', '1');
-        query.delete('limit');
         setQuery(query);
     };
 

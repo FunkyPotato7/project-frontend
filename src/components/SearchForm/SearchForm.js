@@ -97,7 +97,7 @@ const SearchForm = ({handleOpen}) => {
     };
 
     const Reset = () => {
-        setQuery('page=1');
+        setQuery('page=1&limit=30&order=-num');
         setDateValue('');
     }
 

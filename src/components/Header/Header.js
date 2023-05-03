@@ -9,7 +9,7 @@ import { authService } from "../../services";
 import { userActions } from "../../store";
 
 
-const Header = () => { //?excel doesn't work
+const Header = () => {
     const { user } = useSelector(store => store.userReducer);
     const location = useLocation();
     const navigate = useNavigate();
@@ -24,7 +24,7 @@ const Header = () => { //?excel doesn't work
     };
 
     const back = () => {
-        navigate('/paid?page=1&order=-num');
+        navigate('/paid?page=1&limit=30&order=-num');
     };
 
     const logout = async () => {

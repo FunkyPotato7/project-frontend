@@ -15,7 +15,6 @@ function App() {
           }>
               <Route index element={<Navigate to={'/login'}/>}/>
               <Route path={'/login'} element={<LoginPage/>}/>
-              <Route path={'/activate/:id'} element={<ActivatePage/>}/>
           </Route>
           <Route path={'/'} element={
               <RequireAuth>
@@ -26,6 +25,7 @@ function App() {
               <Route path={'/paid'} element={<PaidPage/>}/>
               <Route path={'/admin'} element={<AdminPage/>}/>
           </Route>
+          <Route path={'/activate/:id'} element={<ActivatePage/>}/>
           <Route path={'/bannedPage'} element={<BannedPage/>}/>
           <Route path={'*'} element={<NotFoundPage/>}/>
       </Routes>
