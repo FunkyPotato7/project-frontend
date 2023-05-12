@@ -1,5 +1,5 @@
 import {useNavigate} from "react-router-dom";
-import NotInterestedIcon from "@mui/icons-material/NotInterested";
+import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import { Button } from "@mui/material";
 
 import css from "./NotFoundPage.module.css";
@@ -11,7 +11,7 @@ const NotFoundPage = () => {
     return(
         <div className={css.Page}>
             <div className={css.Content}>
-                <NotInterestedIcon sx={{fontSize: 64}}/>
+                <QuestionMarkIcon sx={{fontSize: 64}}/>
                 <h3>Page Not Found</h3>
                 <div className={css.Text}>
                     <p align="center">Sorry, page with this URL does not exist</p>

@@ -13,7 +13,7 @@ import { User } from "../User/User";
 
 
 const UserList = ({handleSnackOpen}) => {
-    let { users } = useSelector(state => state.userReducer);
+    let { users, user: authUser } = useSelector(state => state.userReducer);
     const { register, handleSubmit, setError, formState: { errors } } = useForm({
         mode: "onSubmit",
         resolver: joiResolver(userValidator.createValidator)
@@ -47,7 +47,7 @@ const UserList = ({handleSnackOpen}) => {
     return(
         <Box className={css.UserList}>
             <Button sx={style.Button} variant="contained" onClick={handleOpen}>Create</Button>
-            {users.map(user => <User key={user._id} userData={user} actionToken={token} handleSnackOpen={handleSnackOpen}/>)}
+            {users.map(user => authUser._id !== user._id && <User key={user._id} userData={user} actionToken={token} handleSnackOpen={handleSnackOpen}/>)}
             <Modal
                 className={css.Modal}
                 open={open}

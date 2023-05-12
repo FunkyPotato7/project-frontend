@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
 import { format, parseISO } from 'date-fns';
 import { Button } from "@mui/material";
 import CreateIcon from '@mui/icons-material/Create';
@@ -12,7 +11,6 @@ import { style } from './muiStyle';
 import { adminService } from "../../services";
 
 const User = ({userData, actionToken, handleSnackOpen}) => {
-    const { user: authUser } = useSelector(store => store.userReducer);
     const [user, setUser] = useState(userData || null);
     const [token, setToken] = useState(actionToken || null);
 
@@ -51,7 +49,7 @@ const User = ({userData, actionToken, handleSnackOpen}) => {
             </div>
             <div className={css.Btns}>
                 {!token ? <Button sx={style.RoundButton} onClick={Recreate} ><CreateIcon/></Button> : <Button sx={style.RoundButton} onClick={copy}><ContentCopyIcon/></Button>}
-                {user.last_login && <Button sx={style.Button} variant="contained" startIcon={user.is_active ? <DoDisturbOnTwoToneIcon/> : <DoDisturbOffTwoToneIcon/>} onClick={block} disabled={authUser._id === user._id && true}>{user.is_active ? 'BAN' : 'UNBAN'}</Button>}
+                {user.last_login && <Button sx={style.Button} variant="contained" startIcon={user.is_active ? <DoDisturbOnTwoToneIcon/> : <DoDisturbOffTwoToneIcon/>} onClick={block}>{user.is_active ? 'BAN' : 'UNBAN'}</Button>}
             </div>
         </div>
     );

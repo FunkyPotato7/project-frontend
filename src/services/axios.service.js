@@ -9,6 +9,7 @@ const history = createBrowserHistory();
 const axiosService = axios.create({baseURL});
 
 let isRefreshing = false;
+let isBanned = false;
 let expired = false;
 
 axiosService.interceptors.request.use((config) => {
@@ -47,8 +48,9 @@ axiosService.interceptors.response.use((config) => {
             return axiosService(error.config);
         }
 
-        if (error.response?.status === 403) {
-            history.replace('/bannedPage');
+        if (error.response?.status === 403 && error.response?.data === "You are banned" && !isBanned) {
+            isBanned = true;
+            window.location.href ='/bannedPage';
             authService.deleteToken('refreshToken');
             return axiosService(error.config);
         }
