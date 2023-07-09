@@ -18,7 +18,7 @@ function App() {
           </Route>
           <Route path={'/'} element={
               <RequireAuth>
-                <MainLayout/>
+                  <MainLayout/>
               </RequireAuth>
           }>
               <Route index element={<Navigate to={'/paid'}/>}/>
